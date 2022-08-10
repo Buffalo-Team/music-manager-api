@@ -5,9 +5,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
-
-// ROUTERS
-// const userRouter = require('./routes/userRouter');
+const mongoose = require('mongoose');
+const useRouters = require('./middlewares/useRouters');
 
 // CONTROLLERS
 // const globalErrorHandler = require('./controllers/errorController');
@@ -21,10 +20,20 @@ if (process.env.HEROKU !== 'true') {
     cors({
       origin: `http://localhost:${process.env.CLIENT_PORT}`,
       credentials: true,
-    }),
+    })
   );
   server.options('*', cors());
 }
+
+const DB_URI = process.env.DATABASE.replace(
+  '<PASSWORD>',
+  process.env.DATABASE_PASSWORD
+);
+
+mongoose.connect(DB_URI).then(() => {
+  // eslint-disable-next-line no-console
+  console.log('DB connection successful');
+});
 
 server.use(express.json({ limit: '10kb' }));
 server.use(cookieParser());
@@ -34,8 +43,7 @@ server.use(xss());
 // Serve static files
 server.use(express.static(path.join(__dirname, '../frontend/build')));
 
-// ROUTES
-// server.use('/api/users', userRouter);
+useRouters(server);
 
 // Redirect other requests to frontend
 server.all('*', (_, res, __) => {
