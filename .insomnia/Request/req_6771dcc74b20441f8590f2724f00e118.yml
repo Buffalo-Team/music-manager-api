@@ -1,0 +1,31 @@
+_id: req_6771dcc74b20441f8590f2724f00e118
+type: Request
+parentId: fld_fcdfb0264a5e4a57a4aa3337b5974439
+modified: 1660125648221
+created: 1660125623610
+url: localhost:8000/api/users/signup
+name: Signup
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Michał",
+    	"surname": "Skwara",
+    	"email": "michalon2000@gmail.com"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_7f93c622f9b74577b22438b80efc12f6
+authentication: {}
+metaSortKey: -1660125623610
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
