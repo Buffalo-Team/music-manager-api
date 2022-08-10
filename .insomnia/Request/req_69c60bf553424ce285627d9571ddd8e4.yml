@@ -1,0 +1,31 @@
+_id: req_69c60bf553424ce285627d9571ddd8e4
+type: Request
+parentId: fld_1818b1f9f15040a68055dec67ce53e84
+modified: 1660139044158
+created: 1660138114366
+url: localhost:8000/api/devices
+name: Create Device
+description: "type: CAR | MOBILE | LAPTOP | PC"
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Skoda Rapid",
+    	"type": "CAR",
+    	"capacityMegabytes": 16384
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_c986bb5fbeb74bc09d62e7fad470b05d
+authentication: {}
+metaSortKey: -1660138114366
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

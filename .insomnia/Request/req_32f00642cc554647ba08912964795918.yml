@@ -1,0 +1,31 @@
+_id: req_32f00642cc554647ba08912964795918
+type: Request
+parentId: fld_a66ec64a7b0b46afbf59cfa004943002
+modified: 1660139977995
+created: 1660139853424
+url: localhost:8000/api/users/62f3b9b23f8d4a56725d0413
+name: Update User
+description: "type: CAR | MOBILE | LAPTOP | PC"
+method: PATCH
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Michał",
+    	"surname": "Skwara",
+    	"email": "email@gmail.com"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_c986bb5fbeb74bc09d62e7fad470b05d
+authentication: {}
+metaSortKey: -1660138096166.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

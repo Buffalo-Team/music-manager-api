@@ -1,0 +1,32 @@
+_id: req_22649ad822e144e29f22422e293a5cce
+type: Request
+parentId: fld_c9abd634fb7144ab9c59be6c7c4f23f4
+modified: 1660139844204
+created: 1660139474172
+url: localhost:8000/api/files
+name: Create File
+description: "type: CAR | MOBILE | LAPTOP | PC"
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Piosenka 1",
+    	"storagePath": "path/to/file",
+    	"isFolder": false,
+    	"isPrivate": false
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_c986bb5fbeb74bc09d62e7fad470b05d
+authentication: {}
+metaSortKey: -1660138114366
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

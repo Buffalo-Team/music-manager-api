@@ -1,0 +1,31 @@
+_id: req_1ce32d48816c42db9ac2a8880539dbed
+type: Request
+parentId: fld_a66ec64a7b0b46afbf59cfa004943002
+modified: 1660139974174
+created: 1660139853423
+url: localhost:8000/api/users
+name: Create User
+description: "type: CAR | MOBILE | LAPTOP | PC"
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Michał",
+    	"surname": "Skwara",
+    	"email": "email@gmail.com"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_c986bb5fbeb74bc09d62e7fad470b05d
+authentication: {}
+metaSortKey: -1660138114366
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

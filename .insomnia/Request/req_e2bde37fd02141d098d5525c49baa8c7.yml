@@ -1,0 +1,21 @@
+_id: req_e2bde37fd02141d098d5525c49baa8c7
+type: Request
+parentId: fld_a66ec64a7b0b46afbf59cfa004943002
+modified: 1660139985988
+created: 1660139853423
+url: localhost:8000/api/users/62f3b9b23f8d4a56725d0413
+name: Get User By Id
+description: "type: CAR | MOBILE | LAPTOP | PC"
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1660138087066.75
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

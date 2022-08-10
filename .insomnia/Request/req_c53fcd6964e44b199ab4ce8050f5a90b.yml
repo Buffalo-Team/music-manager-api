@@ -1,0 +1,32 @@
+_id: req_c53fcd6964e44b199ab4ce8050f5a90b
+type: Request
+parentId: fld_c9abd634fb7144ab9c59be6c7c4f23f4
+modified: 1660139844604
+created: 1660139474174
+url: localhost:8000/api/files/62f3b89325530c08c3d09199
+name: Update File
+description: "type: CAR | MOBILE | LAPTOP | PC"
+method: PATCH
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Piosenka 1",
+    	"storagePath": "path/to/file1",
+    	"isFolder": false,
+    	"isPrivate": false
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_c986bb5fbeb74bc09d62e7fad470b05d
+authentication: {}
+metaSortKey: -1660138096166.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

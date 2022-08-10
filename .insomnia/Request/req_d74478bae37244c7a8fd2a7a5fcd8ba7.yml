@@ -1,0 +1,21 @@
+_id: req_d74478bae37244c7a8fd2a7a5fcd8ba7
+type: Request
+parentId: fld_c9abd634fb7144ab9c59be6c7c4f23f4
+modified: 1660139509619
+created: 1660139474170
+url: localhost:8000/api/files
+name: Get All Files
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1660138077967
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
