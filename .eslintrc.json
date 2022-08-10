@@ -4,18 +4,29 @@
     "commonjs": true,
     "es2021": true
   },
-  "extends": ["airbnb-base"],
+  "extends": ["airbnb-base", "prettier"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest"
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
     "no-unused-vars": [
       "error",
       {
         "varsIgnorePattern": "^_+$",
         "argsIgnorePattern": "^_+$"
+      }
+    ],
+    "prettier/prettier": [
+      "warn",
+      {
+        "tabWidth": 2,
+        "semi": true,
+        "singleQuote": true,
+        "useTabs": false,
+        "bracketSpacing": true,
+        "endOfLine": "auto"
       }
     ]
   }
