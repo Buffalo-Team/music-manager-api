@@ -45,7 +45,6 @@ mongoose.connect(DATABASE_URI).then(() => {
 server.use(express.json({ limit: '10kb' }));
 server.use(cookieParser());
 server.use(mongoSanitize());
-//
 server.use(xss());
 
 // Serve static files
