@@ -1,5 +1,8 @@
-# Music Manager
+# Music Manager API
 
-To run both frontend and backend, use:
+Installation:
 
-- npm run dev
+1. Run command: `npm i`
+2. Ask Repository Owner for environment variables and create `.env` file with them in the root of the project.
+3. Run command: `npm start`
+4. Enjoy!
