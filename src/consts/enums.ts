@@ -6,8 +6,8 @@ enum DeviceType {
 }
 
 enum Status {
-  SUCCESS,
-  ERROR,
+  SUCCESS = 'SUCCESS',
+  ERROR = 'ERROR',
 }
 
 export { DeviceType, Status };
