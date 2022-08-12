@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const FileSchema = new mongoose.Schema(
+const FileSchema = new Schema(
   {
     name: {
       type: String,
       required: true,
     },
     owner: {
-      type: mongoose.Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
     },
     storagePath: {
@@ -18,7 +18,7 @@ const FileSchema = new mongoose.Schema(
       type: Number,
     },
     parentFile: {
-      type: mongoose.Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'File',
     },
     isFolder: {
@@ -33,6 +33,6 @@ const FileSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const File = mongoose.model('File', FileSchema);
+const File = model('File', FileSchema);
 
-module.exports = File;
+export default File;
