@@ -1,7 +1,8 @@
-const mongoose = require('mongoose');
-const deviceTypes = require('../consts/deviceTypes');
+import { Schema, model } from 'mongoose';
+import { DeviceType } from 'consts/enums';
+import normalizeOutput from 'utils/normalizeOutput';
 
-const DeviceSchema = new mongoose.Schema(
+const DeviceSchema = new Schema(
   {
     name: {
       type: String,
@@ -9,7 +10,7 @@ const DeviceSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: Object.values(deviceTypes),
+      enum: Object.values(DeviceType),
       required: true,
     },
     capacityMegabytes: {
@@ -22,7 +23,7 @@ const DeviceSchema = new mongoose.Schema(
     },
     missingFiles: [
       {
-        type: mongoose.Schema.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'File',
       },
     ],
@@ -34,6 +35,8 @@ const DeviceSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Device = mongoose.model('Device', DeviceSchema);
+DeviceSchema.method('toJSON', normalizeOutput);
 
-module.exports = Device;
+const Device = model('Device', DeviceSchema);
+
+export default Device;
