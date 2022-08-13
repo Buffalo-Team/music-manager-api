@@ -1,0 +1,21 @@
+_id: req_b6d53309fcee43288ca9fa8bcd0953d0
+type: Request
+parentId: fld_c9abd634fb7144ab9c59be6c7c4f23f4
+modified: 1660397556811
+created: 1660397543917
+url: localhost:8000/api/files/62f3b89325530c08c3d09199
+name: Delete File By Id
+description: "type: CAR | MOBILE | LAPTOP | PC"
+method: DELETE
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1660138084791.8125
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
