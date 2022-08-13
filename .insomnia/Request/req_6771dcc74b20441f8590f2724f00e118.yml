@@ -1,7 +1,7 @@
 _id: req_6771dcc74b20441f8590f2724f00e118
 type: Request
 parentId: fld_fcdfb0264a5e4a57a4aa3337b5974439
-modified: 1660125648221
+modified: 1660397343272
 created: 1660125623610
 url: localhost:8000/api/users/signup
 name: Signup
@@ -13,7 +13,9 @@ body:
     {
     	"name": "Michał",
     	"surname": "Skwara",
-    	"email": "michalon2000@gmail.com"
+    	"email": "michalon2000@gmail.com",
+    	"password": "aaa",
+    	"passwordConfirm": "aaa"
     }
 parameters: []
 headers:
