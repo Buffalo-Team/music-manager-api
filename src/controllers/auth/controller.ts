@@ -91,21 +91,17 @@ export const getLoggedUser = catchAsync(
         user: null,
       });
     }
-    // 1) verify token
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId: string = (<JwtPayload>decoded).id;
 
-    const logoutCookieOptions = {
-      // do wylogowania w razie errora
-      expires: new Date(Date.now() + 10 * 1000),
-      httpOnly: true,
-    };
-
-    // 2) Check if user still exists
     const currentUser = await User.findById(userId);
 
     if (!currentUser) {
-      res.cookie('jwt', 'loggedout', logoutCookieOptions);
+      res.cookie('jwt', 'loggedout', {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true,
+      });
       // TODO Handle Error
       return next();
     }
