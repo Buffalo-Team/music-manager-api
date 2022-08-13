@@ -1,21 +1,18 @@
-_id: req_6771dcc74b20441f8590f2724f00e118
+_id: req_c9de8b2e78c240658086de11f88481dc
 type: Request
 parentId: fld_fcdfb0264a5e4a57a4aa3337b5974439
-modified: 1660400306032
-created: 1660125623610
-url: localhost:8000/api/users/signup
-name: Signup
+modified: 1660410310542
+created: 1660402360741
+url: localhost:8000/api/users/login
+name: Login
 description: ""
 method: POST
 body:
   mimeType: application/json
   text: |-
     {
-    	"name": "Michał",
-    	"surname": "Skwara",
     	"email": "hhh@gmail.com",
-    	"password": "aaa",
-    	"passwordConfirm": "aaa"
+    	"password": "aaa"
     }
 parameters: []
 headers:
@@ -23,7 +20,7 @@ headers:
     value: application/json
     id: pair_7f93c622f9b74577b22438b80efc12f6
 authentication: {}
-metaSortKey: -1660125623610
+metaSortKey: -1659018342363
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

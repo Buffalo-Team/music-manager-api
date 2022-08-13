@@ -1,7 +1,7 @@
 _id: req_1ce32d48816c42db9ac2a8880539dbed
 type: Request
 parentId: fld_a66ec64a7b0b46afbf59cfa004943002
-modified: 1660139974174
+modified: 1660411029032
 created: 1660139853423
 url: localhost:8000/api/users
 name: Create User
@@ -13,7 +13,9 @@ body:
     {
     	"name": "Michał",
     	"surname": "Skwara",
-    	"email": "email@gmail.com"
+    	"email": "assss@gmail.com",
+    	"password": "aaa",
+    	"passwordConfirm": "aaa"
     }
 parameters: []
 headers:
