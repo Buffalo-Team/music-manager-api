@@ -1,4 +1,4 @@
-import File from 'models/fileModel';
+import File from 'models/file';
 import {
   generateGetAllObjectsCallback,
   generateGetOneObjectCallback,

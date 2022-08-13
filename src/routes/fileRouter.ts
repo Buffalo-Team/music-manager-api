@@ -5,9 +5,12 @@ import {
   deleteFile,
   getAllFiles,
   createFile,
-} from 'controllers/fileController';
+} from 'controllers/file';
+import protect from 'middlewares/protect';
 
 const router = Router();
+
+router.use(protect); // YOU HAVE TO BE LOGGED IN TO ENTER ROUTES BELOW
 
 router.route('/:id').get(getOneFile).patch(updateFile).delete(deleteFile);
 

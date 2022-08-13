@@ -1,4 +1,4 @@
-import Device from 'models/deviceModel';
+import Device from 'models/device';
 import {
   generateGetAllObjectsCallback,
   generateGetOneObjectCallback,

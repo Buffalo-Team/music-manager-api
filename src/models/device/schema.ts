@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { DeviceType } from 'consts/enums';
+import normalizeOutput from 'utils/normalizeOutput';
 
 const DeviceSchema = new Schema(
   {
@@ -33,6 +34,8 @@ const DeviceSchema = new Schema(
   },
   { timestamps: true }
 );
+
+DeviceSchema.method('toJSON', normalizeOutput);
 
 const Device = model('Device', DeviceSchema);
 

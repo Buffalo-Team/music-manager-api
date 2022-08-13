@@ -1,13 +1,14 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { Model } from 'mongoose';
 import { Status } from 'consts/enums';
 import catchAsync from 'utils/catchAsync';
+import IRequest from 'types/Request';
 
 export const generateGetAllObjectsCallback = (
   Object: Model<any>,
   dataKey: string
 ) =>
-  catchAsync(async (req: Request, res: Response) => {
+  catchAsync(async (req: IRequest, res: Response) => {
     const objects = await Object.find();
 
     res.status(200).json({
@@ -20,7 +21,7 @@ export const generateGetOneObjectCallback = (
   Object: Model<any>,
   dataKey: string
 ) =>
-  catchAsync(async (req: Request, res: Response) => {
+  catchAsync(async (req: IRequest, res: Response) => {
     const object = await Object.findById(req.params.id);
 
     res.status(200).json({
@@ -33,7 +34,7 @@ export const generateCreateObjectCallback = (
   Object: Model<any>,
   dataKey: string
 ) =>
-  catchAsync(async (req: Request, res: Response) => {
+  catchAsync(async (req: IRequest, res: Response) => {
     const object = await Object.create(req.body);
 
     res.status(201).json({
@@ -46,7 +47,7 @@ export const generateUpdateObjectCallback = (
   Object: Model<any>,
   dataKey: string
 ) =>
-  catchAsync(async (req: Request, res: Response) => {
+  catchAsync(async (req: IRequest, res: Response) => {
     const object = await Object.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -59,7 +60,7 @@ export const generateUpdateObjectCallback = (
   });
 
 export const generateDeleteObjectCallback = (Object: Model<any>) =>
-  catchAsync(async (req: Request, res: Response) => {
+  catchAsync(async (req: IRequest, res: Response) => {
     await Object.findByIdAndDelete(req.params.id);
 
     res.status(204).json({

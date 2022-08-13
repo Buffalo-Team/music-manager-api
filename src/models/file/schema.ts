@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import normalizeOutput from 'utils/normalizeOutput';
 
 const FileSchema = new Schema(
   {
@@ -32,6 +33,8 @@ const FileSchema = new Schema(
   },
   { timestamps: true }
 );
+
+FileSchema.method('toJSON', normalizeOutput);
 
 const File = model('File', FileSchema);
 

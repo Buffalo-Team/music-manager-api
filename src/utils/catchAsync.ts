@@ -1,12 +1,13 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
+import IRequest from 'types/Request';
 
 type TFunction = (
-  req: Request,
+  req: IRequest,
   res: Response,
   next: NextFunction
 ) => Promise<any>;
 
 export default (fn: TFunction) =>
-  (req: Request, res: Response, next: NextFunction) => {
+  (req: IRequest, res: Response, next: NextFunction) => {
     fn(req, res, next).catch(next);
   };

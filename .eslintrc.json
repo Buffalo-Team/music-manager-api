@@ -35,6 +35,9 @@
       }
     ],
     "no-console": "off",
+    "func-names": "off",
+    "no-restricted-exports": "off",
+    "consistent-return": "off",
     "prettier/prettier": [
       "warn",
       {

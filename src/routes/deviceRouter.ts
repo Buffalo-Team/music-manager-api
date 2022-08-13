@@ -5,9 +5,12 @@ import {
   deleteDevice,
   getAllDevices,
   createDevice,
-} from 'controllers/deviceController';
+} from 'controllers/device';
+import protect from 'middlewares/protect';
 
 const router = Router();
+
+router.use(protect); // YOU HAVE TO BE LOGGED IN TO ENTER ROUTES BELOW
 
 router.route('/:id').get(getOneDevice).patch(updateDevice).delete(deleteDevice);
 
