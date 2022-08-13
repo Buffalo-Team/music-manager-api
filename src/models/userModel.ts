@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const validator = require('validator');
+import { Schema, model } from 'mongoose';
+import validator from 'validator';
 
-const UserSchema = new mongoose.Schema(
+const UserSchema = new Schema(
   {
     name: {
       type: String,
@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema(
     },
     devices: [
       {
-        type: mongoose.Schema.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Device',
       },
     ],
@@ -28,6 +28,6 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const User = mongoose.model('User', UserSchema);
+const User = model('User', UserSchema);
 
-module.exports = User;
+export default User;
