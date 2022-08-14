@@ -1,8 +1,10 @@
 import { Status } from 'consts/enums';
+import messages from 'consts/messages';
 import { NextFunction, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import User, { IUser, IUserMethods } from 'models/user';
 import IRequest from 'types/Request';
+import AppError from 'utils/appError';
 import catchAsync from 'utils/catchAsync';
 import { ILoginRequest, ISignupRequest } from './types';
 
@@ -53,15 +55,13 @@ export const login = catchAsync(
     const { password } = req.body;
 
     if (!email || !password) {
-      // TODO Handle Error
-      return next();
+      return next(new AppError(messages.missingEmailOrPassword, 404));
     }
 
     const user = await User.findOne({ email });
 
     if (!user || !(await user.isCorrectPassword(password))) {
-      // TODO Handle Error
-      return next();
+      return next(new AppError(messages.invalidEmailOrPassword, 401));
     }
 
     createSendToken(user, 200, req, res);
@@ -102,8 +102,7 @@ export const getLoggedUser = catchAsync(
         expires: new Date(Date.now() + 10 * 1000),
         httpOnly: true,
       });
-      // TODO Handle Error
-      return next();
+      return next(new AppError(messages.sessionExpired, 401));
     }
 
     return res.status(200).json({
