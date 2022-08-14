@@ -4,8 +4,9 @@ import mongoSanitize from 'express-mongo-sanitize';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import useRouters from 'middlewares/useRouters';
 import morgan from 'morgan';
+
+import useRouters from 'middlewares/useRouters';
 import notFound from 'middlewares/notFound';
 
 const xss = require('xss-clean');
