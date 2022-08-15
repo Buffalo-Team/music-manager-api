@@ -29,9 +29,15 @@
     "rootDir": "./src" /* Specify the root folder within your source files. */,
     "moduleResolution": "node" /* Specify how TypeScript looks up a file from a given module specifier. */,
     "baseUrl": "./src" /* Specify the base directory to resolve non-relative module names. */,
-    // "paths": {
-    //   "middlewares/*": ["./middlewares/*"]
-    // } /* Specify a set of entries that re-map imports to additional lookup locations. */,
+    "paths": {
+      "consts/*": ["./consts/*"],
+      "controllers/*": ["./controllers/*"],
+      "middlewares/*": ["./middlewares/*"],
+      "models/*": ["./models/*"],
+      "routes/*": ["./routes/*"],
+      "types/*": ["./types/*"],
+      "utils/*": ["./utils/*"]
+    } /* Specify a set of entries that re-map imports to additional lookup locations. */,
     "plugins": [
       {
         "transform": "typescript-transform-paths"
