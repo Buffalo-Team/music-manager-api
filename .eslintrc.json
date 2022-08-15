@@ -38,6 +38,8 @@
     "func-names": "off",
     "no-restricted-exports": "off",
     "consistent-return": "off",
+    "import/no-extraneous-dependencies": "off",
+    "lines-between-class-members": "off",
     "prettier/prettier": [
       "warn",
       {
