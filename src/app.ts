@@ -8,6 +8,7 @@ import morgan from 'morgan';
 
 import useRouters from 'middlewares/useRouters';
 import notFound from 'middlewares/notFound';
+import errorHandler from 'middlewares/errorHandler';
 
 const xss = require('xss-clean');
 
@@ -37,6 +38,7 @@ server.use(xss());
 useRouters(server);
 
 server.all('*', notFound);
+server.use(errorHandler);
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

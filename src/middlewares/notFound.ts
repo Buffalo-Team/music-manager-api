@@ -1,5 +1,5 @@
-import { Status } from 'consts/enums';
 import { Response } from 'express';
+import { Status } from 'consts/enums';
 import IRequest from 'types/Request';
 
 export default (req: IRequest, res: Response) => {

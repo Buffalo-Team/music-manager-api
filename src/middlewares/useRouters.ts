@@ -1,5 +1,4 @@
 import { Application } from 'express';
-
 import fileRouter from 'routes/fileRouter';
 import userRouter from 'routes/userRouter';
 import deviceRouter from 'routes/deviceRouter';

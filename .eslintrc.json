@@ -38,6 +38,21 @@
     "func-names": "off",
     "no-restricted-exports": "off",
     "consistent-return": "off",
+    "import/no-extraneous-dependencies": "off",
+    "lines-between-class-members": "off",
+    "import/order": [
+      1,
+      {
+        "groups": [
+          "external",
+          "builtin",
+          "internal",
+          "sibling",
+          "parent",
+          "index"
+        ]
+      }
+    ],
     "prettier/prettier": [
       "warn",
       {
