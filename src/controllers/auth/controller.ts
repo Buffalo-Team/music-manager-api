@@ -1,7 +1,7 @@
-import { Status } from 'consts/enums';
-import messages from 'consts/messages';
 import { NextFunction, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
+import { Status } from 'consts/enums';
+import messages from 'consts/messages';
 import User, { IUser, IUserMethods } from 'models/user';
 import IRequest from 'types/Request';
 import AppError from 'utils/appError';
