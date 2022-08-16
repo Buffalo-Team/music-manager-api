@@ -1,7 +1,8 @@
 import { Schema, model } from 'mongoose';
 import normalizeOutput from 'utils/normalizeOutput';
+import { FileModel, IFile, IFileDTO, IFileMethods } from './types';
 
-const FileSchema = new Schema(
+const FileSchema = new Schema<IFile, FileModel, IFileMethods>(
   {
     name: {
       type: String,
@@ -35,6 +36,10 @@ const FileSchema = new Schema(
 );
 
 FileSchema.method('toJSON', normalizeOutput);
+
+FileSchema.method('mapToDTO', function (this: IFile): IFileDTO {
+  return this;
+});
 
 const File = model('File', FileSchema);
 

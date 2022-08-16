@@ -1,8 +1,9 @@
 import { Schema, model } from 'mongoose';
 import { DeviceType } from 'consts/enums';
 import normalizeOutput from 'utils/normalizeOutput';
+import { DeviceModel, IDevice, IDeviceDTO, IDeviceMethods } from './types';
 
-const DeviceSchema = new Schema(
+const DeviceSchema = new Schema<IDevice, DeviceModel, IDeviceMethods>(
   {
     name: {
       type: String,
@@ -36,6 +37,10 @@ const DeviceSchema = new Schema(
 );
 
 DeviceSchema.method('toJSON', normalizeOutput);
+
+DeviceSchema.method('mapToDTO', function (this: IDevice): IDeviceDTO {
+  return this;
+});
 
 const Device = model('Device', DeviceSchema);
 
