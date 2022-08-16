@@ -1,1 +1,1 @@
-export const UserDTOSelect = 'id name surname devices';
+export const UserDTOSelect = ['id', 'name', 'surname', 'devices'].join(' ');
