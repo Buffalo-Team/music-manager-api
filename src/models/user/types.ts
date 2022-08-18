@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 export interface IUser {
   id: string;
@@ -7,15 +7,16 @@ export interface IUser {
   email: string;
   password: string;
   passwordConfirm?: string;
-  devices: string[];
+  devices: Types.ObjectId[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface IUserDTO {
   id: string;
   name: string;
   surname: string;
-  email?: string;
-  devices?: string[];
+  devices: Types.ObjectId[];
 }
 
 export interface IUserMethods {

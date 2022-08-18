@@ -55,13 +55,12 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
 UserSchema.method('toJSON', normalizeOutput);
 
 UserSchema.method('mapToDTO', function (this: IUser): IUserDTO {
-  const { id, name, surname, email, devices } = this;
+  const { id, name, surname, devices } = this;
 
   return {
     id,
     name,
     surname,
-    email,
     devices,
   };
 });
