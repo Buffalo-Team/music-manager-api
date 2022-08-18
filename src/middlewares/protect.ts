@@ -1,13 +1,12 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import catchAsync from 'utils/catchAsync';
 import User from 'models/user';
-import IRequest from 'types/Request';
 import AppError from 'utils/appError';
 import messages from 'consts/messages';
 
 export default catchAsync(
-  async (req: IRequest, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.jwt;
 
     if (!token) {

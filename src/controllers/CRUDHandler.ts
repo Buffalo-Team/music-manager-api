@@ -1,8 +1,7 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { Model } from 'mongoose';
 import { Status } from 'consts/enums';
 import catchAsync from 'utils/catchAsync';
-import IRequest from 'types/Request';
 
 interface IModelMethods {
   mapToDTO(): any;
@@ -13,7 +12,7 @@ export const generateGetAllObjectsCallback = (
   dataKey: string,
   select?: string
 ) =>
-  catchAsync(async (req: IRequest, res: Response) => {
+  catchAsync(async (req: Request, res: Response) => {
     const objects: IModelMethods[] = await Object.find().select(select);
 
     res.status(200).json({
@@ -27,7 +26,7 @@ export const generateGetOneObjectCallback = (
   dataKey: string,
   select?: string
 ) =>
-  catchAsync(async (req: IRequest, res: Response) => {
+  catchAsync(async (req: Request, res: Response) => {
     const object: IModelMethods = await Object.findById(req.params.id).select(
       select
     );
@@ -42,7 +41,7 @@ export const generateCreateObjectCallback = (
   Object: Model<any>,
   dataKey: string
 ) =>
-  catchAsync(async (req: IRequest, res: Response) => {
+  catchAsync(async (req: Request, res: Response) => {
     const object: IModelMethods = await Object.create(req.body);
 
     res.status(201).json({
@@ -56,7 +55,7 @@ export const generateUpdateObjectCallback = (
   dataKey: string,
   select?: string
 ) =>
-  catchAsync(async (req: IRequest, res: Response) => {
+  catchAsync(async (req: Request, res: Response) => {
     const object: IModelMethods = await Object.findByIdAndUpdate(
       req.params.id,
       req.body,
@@ -73,7 +72,7 @@ export const generateUpdateObjectCallback = (
   });
 
 export const generateDeleteObjectCallback = (Object: Model<any>) =>
-  catchAsync(async (req: IRequest, res: Response) => {
+  catchAsync(async (req: Request, res: Response) => {
     await Object.findByIdAndDelete(req.params.id);
 
     res.status(204).json({

@@ -1,8 +1,7 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { Status } from 'consts/enums';
-import IRequest from 'types/Request';
 
-export default (req: IRequest, res: Response) => {
+export default (req: Request, res: Response) => {
   res.status(404).json({
     status: Status.NOT_FOUND,
   });

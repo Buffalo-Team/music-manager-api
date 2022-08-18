@@ -1,9 +1,8 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Status } from 'consts/enums';
 import messages from 'consts/messages';
 import User, { IUser, IUserMethods } from 'models/user';
-import IRequest from 'types/Request';
 import AppError from 'utils/appError';
 import catchAsync from 'utils/catchAsync';
 import { ILoginRequest, ISignupRequest } from './types';
@@ -16,7 +15,7 @@ const signToken = (id: string): string =>
 const createSendToken = (
   user: IUser & IUserMethods,
   statusCode: number,
-  req: IRequest,
+  req: Request,
   res: Response
 ) => {
   const token = signToken(user.id);
@@ -68,7 +67,7 @@ export const login = catchAsync(
   }
 );
 
-export const logout = catchAsync(async (req: IRequest, res: Response) => {
+export const logout = catchAsync(async (req: Request, res: Response) => {
   const cookieOptions = {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
@@ -82,7 +81,7 @@ export const logout = catchAsync(async (req: IRequest, res: Response) => {
 });
 
 export const getLoggedUser = catchAsync(
-  async (req: IRequest, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.jwt;
 
     if (!token) {
