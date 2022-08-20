@@ -2,7 +2,7 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import mongoSanitize from 'express-mongo-sanitize';
 import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
+import 'dotenv/config';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
 
@@ -11,8 +11,6 @@ import notFound from 'middlewares/notFound';
 import errorHandler from 'middlewares/errorHandler';
 
 const xss = require('xss-clean');
-
-dotenv.config({ path: '.env' });
 
 const server: Application = express();
 server.use(morgan('dev'));

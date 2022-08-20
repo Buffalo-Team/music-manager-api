@@ -8,4 +8,7 @@ export default {
     `Invalid ${path}: ${value}.`,
   validationFailed: 'Validation failed for the submitted data',
   requestedDataNotFound: 'Requested data not found',
+  missingSomeFields: (fields: string[]) =>
+    `Missing at least one of the required fields: ${fields.join(', ')}`,
+  directoryNotExist: 'Requested directory does not exist',
 };

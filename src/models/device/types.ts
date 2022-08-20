@@ -2,6 +2,7 @@ import { Model, Types } from 'mongoose';
 import { DeviceType } from 'consts/enums';
 
 export interface IDevice {
+  id: Types.ObjectId;
   name: string;
   type: DeviceType;
   capacityMegabytes: number;
@@ -13,6 +14,7 @@ export interface IDevice {
 }
 
 export interface IDeviceDTO {
+  id: Types.ObjectId;
   name: string;
   type: DeviceType;
   capacityMegabytes: number;

@@ -1,7 +1,7 @@
 import { Model, Types } from 'mongoose';
 
 export interface IUser {
-  id: string;
+  id: Types.ObjectId;
   name: string;
   surname: string;
   email: string;
@@ -13,7 +13,7 @@ export interface IUser {
 }
 
 export interface IUserDTO {
-  id: string;
+  id: Types.ObjectId;
   name: string;
   surname: string;
   devices: Types.ObjectId[];
