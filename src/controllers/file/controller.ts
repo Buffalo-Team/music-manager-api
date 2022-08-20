@@ -18,7 +18,7 @@ import {
   generateDeleteObjectCallback,
 } from 'controllers/CRUDHandler';
 import prepareName from 'utils/prepareName';
-import { createFileIfNotExists } from './utils';
+import { createFileIfNotExists, getWarnings } from './utils';
 import {
   ICreateFilesRequest,
   ICreateFolderRequest,
@@ -52,7 +52,7 @@ export const createFilesMatchingUploads = catchAsync(
         isPrivate: req.body.isPrivate,
       };
 
-      creatingFilesPromises.push(createFileIfNotExists(data));
+      creatingFilesPromises.push(createFileIfNotExists(data, req));
     });
 
     const createdFiles = await Promise.all(creatingFilesPromises);
@@ -60,6 +60,7 @@ export const createFilesMatchingUploads = catchAsync(
     res.status(201).json({
       status: Status.SUCCESS,
       files: createdFiles.map((file) => file.mapToDTO()),
+      warnings: getWarnings(req),
     });
   }
 );
@@ -86,11 +87,12 @@ export const createFolder = catchAsync(
       isPrivate: req.body.isPrivate,
     };
 
-    const folder = await createFileIfNotExists(data);
+    const folder = await createFileIfNotExists(data, req);
 
     res.status(201).json({
       status: Status.SUCCESS,
       folder: folder.mapToDTO(),
+      warnings: getWarnings(req),
     });
   }
 );

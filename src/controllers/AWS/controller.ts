@@ -5,6 +5,7 @@ import {
   HeadObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
+import { set } from 'lodash';
 import path from 'node:path';
 import { IMulterFile } from 'types';
 import prepareName from 'utils/prepareName';
@@ -42,7 +43,15 @@ export const uploadToS3 = multer({
       path.join(req.uploadTarget, prepareName(file.originalname))
     );
 
-    if (!file.mimetype.startsWith('audio') || fileAlreadyExist) {
+    const isWrongFileFormat = !file.mimetype.startsWith('audio');
+
+    if (isWrongFileFormat || fileAlreadyExist) {
+      if (isWrongFileFormat) {
+        set(req, 'warnings.wrongFormat', true);
+      }
+      if (fileAlreadyExist) {
+        set(req, 'warnings.alreadyExisted', true);
+      }
       cb(null, false);
     } else {
       cb(null, true);
