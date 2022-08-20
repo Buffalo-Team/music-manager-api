@@ -17,6 +17,13 @@ export const uploadToS3 = multer({
       cb(null, path.join(req.uploadTarget, file.originalname));
     },
   }),
+  fileFilter(req: IUploadRequest, file: IMulterFile, cb: any) {
+    if (!file.mimetype.startsWith('audio')) {
+      cb(null, false);
+    } else {
+      cb(null, true);
+    }
+  },
 });
 
 export const createS3EmptyFolder = (folderPath: string): Promise<any> => {
