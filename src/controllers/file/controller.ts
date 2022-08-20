@@ -17,6 +17,7 @@ import {
   generateUpdateObjectCallback,
   generateDeleteObjectCallback,
 } from 'controllers/CRUDHandler';
+import prepareName from 'utils/prepareName';
 import { createFileIfNotExists } from './utils';
 import {
   ICreateFilesRequest,
@@ -41,7 +42,7 @@ export const createFilesMatchingUploads = catchAsync(
 
     files.forEach((file: IMulterFile) => {
       const data: TFileCreate = {
-        name: file.originalname,
+        name: prepareName(file.originalname),
         owner: req.user.id,
         storageKey: file.key ?? UNKNOWN,
         sizeMegabytes: convertBytesToMegabytes(file.size ?? 0),
