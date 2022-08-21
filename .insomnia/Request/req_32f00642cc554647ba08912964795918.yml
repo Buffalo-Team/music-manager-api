@@ -1,9 +1,9 @@
 _id: req_32f00642cc554647ba08912964795918
 type: Request
 parentId: fld_a66ec64a7b0b46afbf59cfa004943002
-modified: 1660139977995
+modified: 1661077874591
 created: 1660139853424
-url: localhost:8000/api/users/62f3b9b23f8d4a56725d0413
+url: "{{ _.url }}/api/users/62f3b9b23f8d4a56725d0413"
 name: Update User
 description: "type: CAR | MOBILE | LAPTOP | PC"
 method: PATCH

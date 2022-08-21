@@ -1,9 +1,9 @@
 _id: req_4cc0b8caf0404cbfbaaac7151f04038b
 type: Request
 parentId: fld_1818b1f9f15040a68055dec67ce53e84
-modified: 1660397554814
+modified: 1661077862770
 created: 1660397549694
-url: localhost:8000/api/devices/62f3b35365c811ff3306ecb7
+url: "{{ _.url }}/api/devices/62f3b35365c811ff3306ecb7"
 name: Delete Device By Id
 description: "type: CAR | MOBILE | LAPTOP | PC"
 method: DELETE

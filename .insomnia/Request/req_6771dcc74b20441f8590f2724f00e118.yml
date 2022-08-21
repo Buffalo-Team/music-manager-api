@@ -1,9 +1,9 @@
 _id: req_6771dcc74b20441f8590f2724f00e118
 type: Request
 parentId: fld_fcdfb0264a5e4a57a4aa3337b5974439
-modified: 1660571477780
+modified: 1661077912820
 created: 1660125623610
-url: localhost:8000/api/users/signup
+url: "{{ _.url }}/api/users/signup"
 name: Signup
 description: ""
 method: POST

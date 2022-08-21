@@ -1,0 +1,14 @@
+_id: env_19927d51c9ca4e84bc409cb935e49ca4
+type: Environment
+parentId: env_15f79def8a1971017a0c0e5747264eb904b71c52
+modified: 1661078047544
+created: 1661077970205
+name: Public environment
+data:
+  url: https://music-manager-api-dev.herokuapp.com
+dataPropertyOrder:
+  "&":
+    - url
+color: null
+isPrivate: false
+metaSortKey: 1661077970205

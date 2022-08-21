@@ -1,9 +1,9 @@
 _id: req_b6d53309fcee43288ca9fa8bcd0953d0
 type: Request
 parentId: fld_c9abd634fb7144ab9c59be6c7c4f23f4
-modified: 1660988200157
+modified: 1661077903719
 created: 1660397543917
-url: localhost:8000/api/files/6300aae3b71384ea07bc9e7a
+url: "{{ _.url }}/api/files/6300aae3b71384ea07bc9e7a"
 name: Delete File By Id
 description: "type: CAR | MOBILE | LAPTOP | PC"
 method: DELETE

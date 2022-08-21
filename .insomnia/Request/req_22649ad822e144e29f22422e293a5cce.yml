@@ -1,9 +1,9 @@
 _id: req_22649ad822e144e29f22422e293a5cce
 type: Request
 parentId: fld_c9abd634fb7144ab9c59be6c7c4f23f4
-modified: 1661077628595
+modified: 1661077889216
 created: 1660139474172
-url: localhost:8000/api/files/upload/6300bb182129da26402558f7
+url: "{{ _.url }}/api/files/upload/6300bb182129da26402558f7"
 name: Upload Files
 description: |-
   /files/upload/:target?

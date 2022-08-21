@@ -1,9 +1,9 @@
 _id: req_cf58f0cae22c451f9fa3ab6867a88198
 type: Request
 parentId: fld_fcdfb0264a5e4a57a4aa3337b5974439
-modified: 1660410315452
+modified: 1661077909176
 created: 1660410297720
-url: localhost:8000/api/users/me
+url: "{{ _.url }}/api/users/me"
 name: Get Logged User
 description: ""
 method: GET

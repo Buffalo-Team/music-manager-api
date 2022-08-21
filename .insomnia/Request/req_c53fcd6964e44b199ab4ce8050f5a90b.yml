@@ -1,9 +1,9 @@
 _id: req_c53fcd6964e44b199ab4ce8050f5a90b
 type: Request
 parentId: fld_c9abd634fb7144ab9c59be6c7c4f23f4
-modified: 1660139844604
+modified: 1661077900318
 created: 1660139474174
-url: localhost:8000/api/files/62f3b89325530c08c3d09199
+url: "{{ _.url }}/api/files/62f3b89325530c08c3d09199"
 name: Update File
 description: "type: CAR | MOBILE | LAPTOP | PC"
 method: PATCH
