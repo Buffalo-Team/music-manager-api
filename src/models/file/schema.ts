@@ -12,10 +12,11 @@ const FileSchema = new Schema<IFile, FileModel, IFileMethods>(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
-    storagePath: {
+    storageKey: {
       type: String,
       required: true,
     },
+    directLink: String,
     sizeMegabytes: {
       type: Number,
     },
