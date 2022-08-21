@@ -1,8 +1,7 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { forEach } from 'lodash';
 import { MongoServerError } from 'mongodb';
 import messages from 'consts/messages';
-import IRequest from 'types/Request';
 import AppError, { TFieldMessageMap } from 'utils/appError';
 import { Status } from 'consts/enums';
 
@@ -35,7 +34,7 @@ const handleObjectIdError = () =>
 
 export default (
   err: Error | MongoServerError | AppError,
-  req: IRequest,
+  req: Request,
   res: Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
