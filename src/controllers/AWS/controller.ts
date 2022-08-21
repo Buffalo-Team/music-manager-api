@@ -30,17 +30,20 @@ const existsInS3 = async (fileKey: string): Promise<boolean> => {
   }
 };
 
+const createS3Key = (uploadTarget: string, filename: string) =>
+  path.join(uploadTarget, prepareName(filename));
+
 export const uploadToS3 = multer({
   storage: multerS3({
     s3,
     bucket: process.env.S3_BUCKET_NAME,
     key(req: IUploadRequest, file: IMulterFile, cb: any) {
-      cb(null, path.join(req.uploadTarget, prepareName(file.originalname)));
+      cb(null, createS3Key(req.uploadTarget, file.originalname));
     },
   }),
   async fileFilter(req: IUploadRequest, file: IMulterFile, cb: any) {
     const fileAlreadyExist = await existsInS3(
-      path.join(req.uploadTarget, prepareName(file.originalname))
+      createS3Key(req.uploadTarget, file.originalname)
     );
 
     const isWrongFileFormat = !file.mimetype.startsWith('audio');

@@ -3,7 +3,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Types } from 'mongoose';
 import { Status } from 'consts/enums';
 import messages from 'consts/messages';
-import User, { IUser, IUserMethods } from 'models/user';
+import User, { IUser } from 'models/user';
 import AppError from 'utils/appError';
 import catchAsync from 'utils/catchAsync';
 import { ILoginRequest, ISignupRequest } from './types';
@@ -14,7 +14,7 @@ const signToken = (id: Types.ObjectId): string =>
   });
 
 const createSendToken = (
-  user: IUser & IUserMethods,
+  user: IUser,
   statusCode: number,
   req: Request,
   res: Response

@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express';
 import { isArray } from 'lodash';
 import { Types } from 'mongoose';
 import path from 'path';
-import File, { IFile, IFileMethods } from 'models/file';
+import File, { IFile } from 'models/file';
 import convertBytesToMegabytes from 'utils/convertBytesToMegabytes';
 import { IMulterFile } from 'types';
 import catchAsync from 'utils/catchAsync';
@@ -37,7 +37,7 @@ export const createFilesMatchingUploads = catchAsync(
   async (req: ICreateFilesRequest, res: Response) => {
     const files: IMulterFile[] = isArray(req.files) ? req.files : [];
 
-    const creatingFilesPromises: Promise<IFile & IFileMethods>[] = [];
+    const creatingFilesPromises: Promise<IFile>[] = [];
     const parentFileId = req.params.target;
 
     files.forEach((file: IMulterFile) => {

@@ -1,13 +1,13 @@
 import { set } from 'lodash';
 import { IUploadRequest } from 'controllers/AWS/types';
-import File, { IFile, IFileMethods } from 'models/file';
+import File, { IFile } from 'models/file';
 import messages from 'consts/messages';
 import { TFileCreate } from './types';
 
 export const createFileIfNotExists = async (
   data: TFileCreate,
   req: IUploadRequest
-): Promise<IFile & IFileMethods> => {
+): Promise<IFile> => {
   let file = await File.findOne({
     name: data.name,
     owner: data.owner,
