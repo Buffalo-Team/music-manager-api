@@ -1,25 +1,42 @@
 _id: req_22649ad822e144e29f22422e293a5cce
 type: Request
 parentId: fld_c9abd634fb7144ab9c59be6c7c4f23f4
-modified: 1660139844204
+modified: 1661077628595
 created: 1660139474172
-url: localhost:8000/api/files
-name: Create File
-description: "type: CAR | MOBILE | LAPTOP | PC"
+url: localhost:8000/api/files/upload/6300bb182129da26402558f7
+name: Upload Files
+description: |-
+  /files/upload/:target?
+
+  e.g.
+
+  /files/upload -> will upload files to root directory
+
+  /files/upload/some_other_folder_id -> will upload files to some_other_folder
 method: POST
 body:
-  mimeType: application/json
-  text: |-
-    {
-    	"name": "Piosenka 1",
-    	"storagePath": "path/to/file",
-    	"isFolder": false,
-    	"isPrivate": false
-    }
+  mimeType: multipart/form-data
+  params:
+    - id: pair_38aea51f44094b769150ec5e3717b15d
+      name: isPrivate
+      value: "true"
+      description: ""
+    - id: pair_0fff957a4a8446af938166efdd82e0d1
+      name: songs
+      value: ""
+      description: ""
+      type: file
+      fileName: /home/michal/Pobrane/logo(1).svg
+    - id: pair_69a110f9f877427a9bef56431b11c37b
+      name: songs
+      value: ""
+      description: ""
+      type: file
+      fileName: /home/michal/Muzyka/Little Sis Nora - MDMA.mp3
 parameters: []
 headers:
   - name: Content-Type
-    value: application/json
+    value: multipart/form-data
     id: pair_c986bb5fbeb74bc09d62e7fad470b05d
 authentication: {}
 metaSortKey: -1660138114366

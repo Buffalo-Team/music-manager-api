@@ -1,9 +1,9 @@
 _id: req_e2bde37fd02141d098d5525c49baa8c7
 type: Request
 parentId: fld_a66ec64a7b0b46afbf59cfa004943002
-modified: 1660139985988
+modified: 1660637472480
 created: 1660139853423
-url: localhost:8000/api/users/62f3b9b23f8d4a56725d0413
+url: localhost:8000/api/users/62f37d62f962cc8a59a05d39
 name: Get User By Id
 description: "type: CAR | MOBILE | LAPTOP | PC"
 method: GET
