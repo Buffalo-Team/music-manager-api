@@ -26,11 +26,11 @@ export const createFileIfNotExists = async (
 
 export const getWarnings = (req: IUploadRequest): string[] => {
   const warnings: string[] = [];
-  if (req.warnings.alreadyExisted) {
+  if (req?.warnings?.alreadyExisted) {
     warnings.push(messages.someFilesAlreadyExisted);
   }
 
-  if (req.warnings.wrongFormat) {
+  if (req?.warnings?.wrongFormat) {
     warnings.push(messages.wrongFileType);
   }
 
