@@ -1,4 +1,4 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { isArray } from 'lodash';
 import { Types } from 'mongoose';
 import path from 'path';
@@ -25,13 +25,29 @@ import {
   TFileCreate,
 } from './types';
 
-export const getAllFiles = generateGetAllObjectsCallback(File, 'files');
+export const getAllFiles = catchAsync(async (req: Request, res: Response) => {
+  generateGetAllObjectsCallback({
+    Object: File,
+    dataKey: 'files',
+    filter: {
+      owner: req.user.id,
+    },
+    req,
+    res,
+  });
+});
 
-export const getOneFile = generateGetOneObjectCallback(File, 'file');
+export const getOneFile = catchAsync(async (req: Request, res: Response) => {
+  generateGetOneObjectCallback({ Object: File, dataKey: 'file', req, res });
+});
 
-export const updateFile = generateUpdateObjectCallback(File, 'file');
+export const updateFile = catchAsync(async (req: Request, res: Response) => {
+  generateUpdateObjectCallback({ Object: File, dataKey: 'file', req, res });
+});
 
-export const deleteFile = generateDeleteObjectCallback(File);
+export const deleteFile = catchAsync(async (req: Request, res: Response) => {
+  generateDeleteObjectCallback({ Object: File, req, res });
+});
 
 export const createFilesMatchingUploads = catchAsync(
   async (req: ICreateFilesRequest, res: Response) => {
