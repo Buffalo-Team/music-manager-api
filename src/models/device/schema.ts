@@ -14,6 +14,10 @@ const DeviceSchema = new Schema<IDevice, DeviceModel, IDeviceMethods>(
       enum: Object.values(DeviceType),
       required: true,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
     capacityMegabytes: {
       type: Number,
       required: true,

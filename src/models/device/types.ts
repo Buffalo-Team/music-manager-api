@@ -5,6 +5,7 @@ export interface IDeviceDTO {
   id: Types.ObjectId;
   name: string;
   type: DeviceType;
+  owner: Types.ObjectId;
   capacityMegabytes: number;
   allocatedMegabytes: number;
   missingFiles: Types.ObjectId[];

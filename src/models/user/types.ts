@@ -4,7 +4,6 @@ export interface IUserDTO {
   id: Types.ObjectId;
   name: string;
   surname: string;
-  devices: Types.ObjectId[];
 }
 
 export interface IUserMethods {
