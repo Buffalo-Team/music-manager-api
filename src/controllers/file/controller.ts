@@ -38,7 +38,13 @@ export const getAllFiles = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const getOneFile = catchAsync(async (req: Request, res: Response) => {
-  generateGetOneObjectCallback({ Object: File, dataKey: 'file', req, res });
+  generateGetOneObjectCallback({
+    Object: File,
+    dataKey: 'file',
+    filter: { owner: req.user.id },
+    req,
+    res,
+  });
 });
 
 export const updateFile = catchAsync(async (req: Request, res: Response) => {

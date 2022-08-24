@@ -22,7 +22,13 @@ export const getAllDevices = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const getOneDevice = catchAsync(async (req: Request, res: Response) => {
-  generateGetOneObjectCallback({ Object: Device, dataKey: 'device', req, res });
+  generateGetOneObjectCallback({
+    Object: Device,
+    dataKey: 'device',
+    filter: { owner: req.user.id },
+    req,
+    res,
+  });
 });
 
 export const createDevice = catchAsync(async (req: Request, res: Response) => {

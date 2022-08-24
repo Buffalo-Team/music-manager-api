@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { FilterQuery, Model } from 'mongoose';
+import { assign } from 'lodash';
 import { Status } from 'consts/enums';
 
 interface IModelMethods {
@@ -36,12 +37,13 @@ export const generateGetOneObjectCallback = async ({
   Object,
   dataKey,
   select,
+  filter,
   req,
   res,
 }: IProps) => {
-  const object: IModelMethods = await Object.findById(req.params.id).select(
-    select
-  );
+  const query = assign({ _id: req.params.id }, filter);
+
+  const object: IModelMethods = await Object.findOne(query).select(select);
 
   res.status(200).json({
     status: Status.SUCCESS,
