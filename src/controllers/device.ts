@@ -37,9 +37,20 @@ export const createDevice = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const updateDevice = catchAsync(async (req: Request, res: Response) => {
-  generateUpdateObjectCallback({ Object: Device, dataKey: 'device', req, res });
+  generateUpdateObjectCallback({
+    Object: Device,
+    dataKey: 'device',
+    filter: { owner: req.user.id },
+    req,
+    res,
+  });
 });
 
 export const deleteDevice = catchAsync(async (req: Request, res: Response) => {
-  generateDeleteObjectCallback({ Object: Device, req, res });
+  generateDeleteObjectCallback({
+    Object: Device,
+    filter: { owner: req.user.id },
+    req,
+    res,
+  });
 });

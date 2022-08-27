@@ -69,17 +69,16 @@ export const generateUpdateObjectCallback = async ({
   Object,
   dataKey,
   select,
+  filter,
   req,
   res,
 }: IProps) => {
-  const object: IModelMethods = await Object.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    {
-      new: true,
-      runValidators: true,
-    }
-  ).select(select);
+  const query = assign({ _id: req.params.id }, filter);
+
+  const object: IModelMethods = await Object.findOneAndUpdate(query, req.body, {
+    new: true,
+    runValidators: true,
+  }).select(select);
 
   res.status(201).json({
     status: Status.SUCCESS,
@@ -89,10 +88,12 @@ export const generateUpdateObjectCallback = async ({
 
 export const generateDeleteObjectCallback = async ({
   Object,
+  filter,
   req,
   res,
 }: Omit<IProps, 'dataKey'>) => {
-  await Object.findByIdAndDelete(req.params.id);
+  const query = assign({ _id: req.params.id }, filter);
+  await Object.findOneAndDelete(query);
 
   res.status(204).json({
     status: Status.SUCCESS,

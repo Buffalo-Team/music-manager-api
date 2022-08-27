@@ -48,11 +48,22 @@ export const getOneFile = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const updateFile = catchAsync(async (req: Request, res: Response) => {
-  generateUpdateObjectCallback({ Object: File, dataKey: 'file', req, res });
+  generateUpdateObjectCallback({
+    Object: File,
+    dataKey: 'file',
+    filter: { owner: req.user.id },
+    req,
+    res,
+  });
 });
 
 export const deleteFile = catchAsync(async (req: Request, res: Response) => {
-  generateDeleteObjectCallback({ Object: File, req, res });
+  generateDeleteObjectCallback({
+    Object: File,
+    req,
+    filter: { owner: req.user.id },
+    res,
+  });
 });
 
 export const createFilesMatchingUploads = catchAsync(
