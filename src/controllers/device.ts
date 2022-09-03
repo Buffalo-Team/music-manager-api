@@ -1,4 +1,6 @@
+import { Request, Response } from 'express';
 import Device from 'models/device';
+import catchAsync from 'utils/catchAsync';
 import {
   generateGetAllObjectsCallback,
   generateGetOneObjectCallback,
@@ -7,12 +9,48 @@ import {
   generateDeleteObjectCallback,
 } from './CRUDHandler';
 
-export const getAllDevices = generateGetAllObjectsCallback(Device, 'devices');
+export const getAllDevices = catchAsync(async (req: Request, res: Response) => {
+  generateGetAllObjectsCallback({
+    Object: Device,
+    dataKey: 'devices',
+    filter: {
+      owner: req.user.id,
+    },
+    req,
+    res,
+  });
+});
 
-export const getOneDevice = generateGetOneObjectCallback(Device, 'device');
+export const getOneDevice = catchAsync(async (req: Request, res: Response) => {
+  generateGetOneObjectCallback({
+    Object: Device,
+    dataKey: 'device',
+    filter: { owner: req.user.id },
+    req,
+    res,
+  });
+});
 
-export const createDevice = generateCreateObjectCallback(Device, 'device');
+export const createDevice = catchAsync(async (req: Request, res: Response) => {
+  req.body.owner = req.user.id;
+  generateCreateObjectCallback({ Object: Device, dataKey: 'device', req, res });
+});
 
-export const updateDevice = generateUpdateObjectCallback(Device, 'device');
+export const updateDevice = catchAsync(async (req: Request, res: Response) => {
+  generateUpdateObjectCallback({
+    Object: Device,
+    dataKey: 'device',
+    filter: { owner: req.user.id },
+    req,
+    res,
+  });
+});
 
-export const deleteDevice = generateDeleteObjectCallback(Device);
+export const deleteDevice = catchAsync(async (req: Request, res: Response) => {
+  generateDeleteObjectCallback({
+    Object: Device,
+    filter: { owner: req.user.id },
+    req,
+    res,
+  });
+});

@@ -42,12 +42,6 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
       },
       select: false,
     },
-    devices: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Device',
-      },
-    ],
   },
   { timestamps: true }
 );
@@ -55,13 +49,12 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
 UserSchema.method('toJSON', normalizeOutput);
 
 UserSchema.method('mapToDTO', function (this: IUser): IUserDTO {
-  const { id, name, surname, devices } = this;
+  const { id, name, surname } = this;
 
   return {
     id,
     name,
     surname,
-    devices,
   };
 });
 

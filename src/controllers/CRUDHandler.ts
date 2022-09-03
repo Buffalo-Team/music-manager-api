@@ -1,81 +1,101 @@
 import { Request, Response } from 'express';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
+import { assign } from 'lodash';
 import { Status } from 'consts/enums';
-import catchAsync from 'utils/catchAsync';
 
 interface IModelMethods {
   mapToDTO(): any;
 }
 
-export const generateGetAllObjectsCallback = (
-  Object: Model<any>,
-  dataKey: string,
-  select?: string
-) =>
-  catchAsync(async (req: Request, res: Response) => {
-    const objects: IModelMethods[] = await Object.find().select(select);
+interface IProps {
+  Object: Model<any>;
+  dataKey: string;
+  select?: string;
+  filter?: FilterQuery<any>;
+  req: Request;
+  res: Response;
+}
 
-    res.status(200).json({
-      status: Status.SUCCESS,
-      [dataKey]: objects,
-    });
+export const generateGetAllObjectsCallback = async ({
+  Object,
+  dataKey,
+  select,
+  filter,
+  res,
+}: IProps) => {
+  const objects: IModelMethods[] = await Object.find(filter || {}).select(
+    select
+  );
+
+  res.status(200).json({
+    status: Status.SUCCESS,
+    [dataKey]: objects,
   });
+};
 
-export const generateGetOneObjectCallback = (
-  Object: Model<any>,
-  dataKey: string,
-  select?: string
-) =>
-  catchAsync(async (req: Request, res: Response) => {
-    const object: IModelMethods = await Object.findById(req.params.id).select(
-      select
-    );
+export const generateGetOneObjectCallback = async ({
+  Object,
+  dataKey,
+  select,
+  filter,
+  req,
+  res,
+}: IProps) => {
+  const query = assign({ _id: req.params.id }, filter);
 
-    res.status(200).json({
-      status: Status.SUCCESS,
-      [dataKey]: object,
-    });
+  const object: IModelMethods = await Object.findOne(query).select(select);
+
+  res.status(200).json({
+    status: Status.SUCCESS,
+    [dataKey]: object,
   });
+};
 
-export const generateCreateObjectCallback = (
-  Object: Model<any>,
-  dataKey: string
-) =>
-  catchAsync(async (req: Request, res: Response) => {
-    const object: IModelMethods = await Object.create(req.body);
+export const generateCreateObjectCallback = async ({
+  Object,
+  dataKey,
+  req,
+  res,
+}: IProps) => {
+  const object: IModelMethods = await Object.create(req.body);
 
-    res.status(201).json({
-      status: Status.SUCCESS,
-      [dataKey]: object.mapToDTO(),
-    });
+  res.status(201).json({
+    status: Status.SUCCESS,
+    [dataKey]: object.mapToDTO(),
   });
+};
 
-export const generateUpdateObjectCallback = (
-  Object: Model<any>,
-  dataKey: string,
-  select?: string
-) =>
-  catchAsync(async (req: Request, res: Response) => {
-    const object: IModelMethods = await Object.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    ).select(select);
+export const generateUpdateObjectCallback = async ({
+  Object,
+  dataKey,
+  select,
+  filter,
+  req,
+  res,
+}: IProps) => {
+  const query = assign({ _id: req.params.id }, filter);
 
-    res.status(201).json({
-      status: Status.SUCCESS,
-      [dataKey]: object,
-    });
+  const object: IModelMethods = await Object.findOneAndUpdate(query, req.body, {
+    new: true,
+    runValidators: true,
+  }).select(select);
+
+  res.status(201).json({
+    status: Status.SUCCESS,
+    [dataKey]: object,
   });
+};
 
-export const generateDeleteObjectCallback = (Object: Model<any>) =>
-  catchAsync(async (req: Request, res: Response) => {
-    await Object.findByIdAndDelete(req.params.id);
+export const generateDeleteObjectCallback = async ({
+  Object,
+  filter,
+  req,
+  res,
+}: Omit<IProps, 'dataKey'>) => {
+  const query = assign({ _id: req.params.id }, filter);
+  await Object.findOneAndDelete(query);
 
-    res.status(204).json({
-      status: Status.SUCCESS,
-    });
+  res.status(204).json({
+    status: Status.SUCCESS,
   });
+};
