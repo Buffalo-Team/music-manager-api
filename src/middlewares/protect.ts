@@ -4,6 +4,11 @@ import catchAsync from 'utils/catchAsync';
 import User from 'models/user';
 import AppError from 'utils/appError';
 import messages from 'consts/messages';
+import { Environment } from 'consts/enums';
+
+const environment: Environment =
+  Environment[process.env.NODE_ENV as keyof typeof Environment] ||
+  Environment.DEV;
 
 export default catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -22,6 +27,8 @@ export default catchAsync(
       res.cookie('jwt', 'loggedout', {
         expires: new Date(Date.now() + 10 * 1000),
         httpOnly: true,
+        secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+        sameSite: environment !== Environment.DEV ? 'none' : undefined,
       });
       return next(new AppError(messages.sessionExpired, 401));
     }

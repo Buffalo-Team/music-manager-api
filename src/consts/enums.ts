@@ -11,4 +11,9 @@ enum Status {
   NOT_FOUND = 'NOT_FOUND',
 }
 
-export { DeviceType, Status };
+enum Environment {
+  DEV = 'development',
+  PROD = 'production',
+}
+
+export { DeviceType, Status, Environment };
