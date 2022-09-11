@@ -1,12 +1,16 @@
 import { CookieOptions, NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Types } from 'mongoose';
-import { Status } from 'consts/enums';
+import { Environment, Status } from 'consts/enums';
 import messages from 'consts/messages';
 import User, { IUser } from 'models/user';
 import AppError from 'utils/appError';
 import catchAsync from 'utils/catchAsync';
 import { ILoginRequest, ISignupRequest } from './types';
+
+const environment: Environment =
+  Environment[process.env.NODE_ENV as keyof typeof Environment] ||
+  Environment.DEV;
 
 const signToken = (id: Types.ObjectId): string =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -25,7 +29,7 @@ const createSendToken = (
     expires: new Date(Date.now() + Number(process.env.JWT_EXPIRES_IN)),
     httpOnly: true,
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
-    sameSite: 'none',
+    sameSite: environment !== Environment.DEV ? 'none' : undefined,
   };
 
   res.cookie('jwt', token, cookieOptions);
@@ -70,9 +74,11 @@ export const login = catchAsync(
 );
 
 export const logout = catchAsync(async (req: Request, res: Response) => {
-  const cookieOptions = {
+  const cookieOptions: CookieOptions = {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    sameSite: environment !== Environment.DEV ? 'none' : undefined,
   };
 
   res.cookie('jwt', 'loggedout', cookieOptions);
@@ -102,6 +108,8 @@ export const getLoggedUser = catchAsync(
       res.cookie('jwt', 'loggedout', {
         expires: new Date(Date.now() + 10 * 1000),
         httpOnly: true,
+        secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+        sameSite: environment !== Environment.DEV ? 'none' : undefined,
       });
       return next(new AppError(messages.sessionExpired, 401));
     }
