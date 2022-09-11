@@ -12,8 +12,8 @@ enum Status {
 }
 
 enum Environment {
-  DEV = 'development',
-  PROD = 'production',
+  development = 'development',
+  production = 'production',
 }
 
 export { DeviceType, Status, Environment };
