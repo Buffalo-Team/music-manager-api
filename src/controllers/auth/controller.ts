@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { CookieOptions, NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Types } from 'mongoose';
 import { Status } from 'consts/enums';
@@ -21,10 +21,11 @@ const createSendToken = (
 ) => {
   const token = signToken(user.id);
 
-  const cookieOptions = {
+  const cookieOptions: CookieOptions = {
     expires: new Date(Date.now() + Number(process.env.JWT_EXPIRES_IN)),
     httpOnly: true,
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    sameSite: 'none',
   };
 
   res.cookie('jwt', token, cookieOptions);
