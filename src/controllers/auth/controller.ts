@@ -10,7 +10,7 @@ import { ILoginRequest, ISignupRequest } from './types';
 
 const environment: Environment =
   Environment[process.env.NODE_ENV as keyof typeof Environment] ||
-  Environment.DEV;
+  Environment.development;
 
 const signToken = (id: Types.ObjectId): string =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -29,17 +29,8 @@ const createSendToken = (
     expires: new Date(Date.now() + Number(process.env.JWT_EXPIRES_IN)),
     httpOnly: true,
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
-    sameSite: environment !== Environment.DEV ? 'none' : undefined,
+    sameSite: environment !== Environment.development ? 'none' : undefined,
   };
-
-  console.log(
-    environment,
-    process.env.NODE_ENV,
-    token,
-    req.secure,
-    req.headers['x-forwarded-proto'] === 'https'
-  );
-  console.log(cookieOptions);
 
   res.cookie('jwt', token, cookieOptions);
 
@@ -87,7 +78,7 @@ export const logout = catchAsync(async (req: Request, res: Response) => {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
-    sameSite: environment !== Environment.DEV ? 'none' : undefined,
+    sameSite: environment !== Environment.development ? 'none' : undefined,
   };
 
   res.cookie('jwt', 'loggedout', cookieOptions);
@@ -118,7 +109,7 @@ export const getLoggedUser = catchAsync(
         expires: new Date(Date.now() + 10 * 1000),
         httpOnly: true,
         secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
-        sameSite: environment !== Environment.DEV ? 'none' : undefined,
+        sameSite: environment !== Environment.development ? 'none' : undefined,
       });
       return next(new AppError(messages.sessionExpired, 401));
     }

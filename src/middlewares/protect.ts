@@ -8,7 +8,7 @@ import { Environment } from 'consts/enums';
 
 const environment: Environment =
   Environment[process.env.NODE_ENV as keyof typeof Environment] ||
-  Environment.DEV;
+  Environment.development;
 
 export default catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -28,7 +28,7 @@ export default catchAsync(
         expires: new Date(Date.now() + 10 * 1000),
         httpOnly: true,
         secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
-        sameSite: environment !== Environment.DEV ? 'none' : undefined,
+        sameSite: environment !== Environment.development ? 'none' : undefined,
       });
       return next(new AppError(messages.sessionExpired, 401));
     }
