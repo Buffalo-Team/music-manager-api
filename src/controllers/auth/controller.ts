@@ -32,6 +32,15 @@ const createSendToken = (
     sameSite: environment !== Environment.DEV ? 'none' : undefined,
   };
 
+  console.log(
+    environment,
+    process.env.NODE_ENV,
+    token,
+    req.secure,
+    req.headers['x-forwarded-proto'] === 'https'
+  );
+  console.log(cookieOptions);
+
   res.cookie('jwt', token, cookieOptions);
 
   res.status(statusCode).json({
