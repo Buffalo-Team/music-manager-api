@@ -66,22 +66,22 @@ export const uploadToS3 = multer({
   },
 });
 
-export const createS3EmptyFolder = (folderPath: string): Promise<any> => {
+export const createS3EmptyFolder = async (folderPath: string) => {
   const params = {
     Bucket: process.env.S3_BUCKET_NAME,
     Key: folderPath,
   };
   const command = new PutObjectCommand(params);
-  return s3.send(command);
+  await s3.send(command);
 };
 
-export const deleteFileFromS3 = (filePath: string): Promise<any> => {
+export const deleteFileFromS3 = async (filePath: string) => {
   const params = {
     Bucket: process.env.S3_BUCKET_NAME,
     Key: filePath,
   };
   const command = new DeleteObjectCommand(params);
-  return s3.send(command);
+  await s3.send(command);
 };
 
 // KEEP IN MIND - Maybe it will fail for deleting more than 1000 files

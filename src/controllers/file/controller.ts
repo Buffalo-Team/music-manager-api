@@ -138,7 +138,7 @@ export const createFolder = catchAsync(
     }
 
     const storageKey = `${path.join(req.uploadTarget, req.body.name)}/`;
-    createS3EmptyFolder(storageKey);
+    await createS3EmptyFolder(storageKey);
 
     const parentFileId = req.params.target;
 
