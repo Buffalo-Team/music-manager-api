@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { flatten, isArray } from 'lodash';
+import { isArray } from 'lodash';
 import { Types } from 'mongoose';
 import path from 'path';
 import File, { IFile } from 'models/file';
@@ -21,7 +21,11 @@ import {
   generateUpdateObjectCallback,
 } from 'controllers/CRUDHandler';
 import prepareName from 'utils/prepareName';
-import { createFileIfNotExists, getWarnings } from './utils';
+import {
+  createFileIfNotExists,
+  getFolderNestedFiles,
+  getWarnings,
+} from './utils';
 import {
   ICreateFilesRequest,
   ICreateFolderRequest,
@@ -59,28 +63,6 @@ export const updateFile = catchAsync(async (req: Request, res: Response) => {
     res,
   });
 });
-
-const getFolderNestedFiles = async (
-  folderId: Types.ObjectId
-): Promise<IFile[]> => {
-  const firstLevelNestedFiles: IFile[] = await File.find({
-    parentFile: folderId,
-  });
-  const allNestedFiles = [...firstLevelNestedFiles];
-
-  const promises: Promise<IFile[]>[] = [];
-  firstLevelNestedFiles.forEach((firstLevelFile) => {
-    if (firstLevelFile.isFolder) {
-      const findNestedFilesPromise = getFolderNestedFiles(firstLevelFile.id);
-      promises.push(findNestedFilesPromise);
-    }
-  });
-
-  const results = await Promise.all(promises);
-
-  allNestedFiles.push(...flatten(results));
-  return allNestedFiles;
-};
 
 export const deleteFile = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
