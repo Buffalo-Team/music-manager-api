@@ -3,7 +3,11 @@ import multerS3 from 'multer-s3';
 import {
   PutObjectCommand,
   HeadObjectCommand,
+  DeleteObjectCommand,
+  ListObjectsCommand,
   S3Client,
+  DeleteObjectsCommand,
+  ObjectIdentifier,
 } from '@aws-sdk/client-s3';
 import { set } from 'lodash';
 import path from 'node:path';
@@ -69,4 +73,43 @@ export const createS3EmptyFolder = (folderPath: string): Promise<any> => {
   };
   const command = new PutObjectCommand(params);
   return s3.send(command);
+};
+
+export const deleteFileFromS3 = (filePath: string): Promise<any> => {
+  const params = {
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key: filePath,
+  };
+  const command = new DeleteObjectCommand(params);
+  return s3.send(command);
+};
+
+// KEEP IN MIND - Maybe it will fail for deleting more than 1000 files
+// Copied and modified from https://stackoverflow.com/a/48955582
+export const deleteFolderFromS3 = async (folderPath: string) => {
+  const listParams = {
+    Bucket: process.env.S3_BUCKET_NAME,
+    Prefix: folderPath,
+  };
+
+  const listCommand = new ListObjectsCommand(listParams);
+  const listedObjects = await s3.send(listCommand);
+
+  if (!listedObjects?.Contents?.length) return;
+
+  const ObjectsToDelete: ObjectIdentifier[] = [];
+
+  listedObjects.Contents.forEach(({ Key }) => {
+    ObjectsToDelete.push({ Key });
+  });
+
+  const deleteParams = {
+    Bucket: process.env.S3_BUCKET_NAME,
+    Delete: { Objects: ObjectsToDelete },
+  };
+
+  const deleteCommand = new DeleteObjectsCommand(deleteParams);
+  await s3.send(deleteCommand);
+
+  if (listedObjects.IsTruncated) await deleteFolderFromS3(folderPath);
 };

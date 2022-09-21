@@ -11,6 +11,7 @@ export default {
   missingSomeFields: (fields: string[]) =>
     `Missing at least one of the required fields: ${fields.join(', ')}`,
   directoryNotExist: 'Requested directory does not exist',
+  fileNotExist: 'Requested file does not exist',
   someFilesAlreadyExisted: 'Some of the uploaded files have already existed',
   wrongFileType: 'Some of the uploaded files had wrong format',
 };
