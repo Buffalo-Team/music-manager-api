@@ -1,4 +1,5 @@
-import { set } from 'lodash';
+import { flatten, set } from 'lodash';
+import { Types } from 'mongoose';
 import { IUploadRequest } from 'controllers/AWS/types';
 import File, { IFile } from 'models/file';
 import messages from 'consts/messages';
@@ -35,4 +36,26 @@ export const getWarnings = (req: IUploadRequest): string[] => {
   }
 
   return warnings;
+};
+
+export const getFolderNestedFiles = async (
+  folderId: Types.ObjectId
+): Promise<IFile[]> => {
+  const firstLevelNestedFiles: IFile[] = await File.find({
+    parentFile: folderId,
+  });
+  const allNestedFiles = [...firstLevelNestedFiles];
+
+  const promises: Promise<IFile[]>[] = [];
+  firstLevelNestedFiles.forEach((firstLevelFile) => {
+    if (firstLevelFile.isFolder) {
+      const findNestedFilesPromise = getFolderNestedFiles(firstLevelFile.id);
+      promises.push(findNestedFilesPromise);
+    }
+  });
+
+  const results = await Promise.all(promises);
+
+  allNestedFiles.push(...flatten(results));
+  return allNestedFiles;
 };

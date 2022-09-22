@@ -10,15 +10,22 @@ import AppError from 'utils/appError';
 import { Status } from 'consts/enums';
 import messages from 'consts/messages';
 import UNKNOWN from 'consts/unknown';
-import { createS3EmptyFolder } from 'controllers/AWS';
+import {
+  createS3EmptyFolder,
+  deleteFileFromS3,
+  deleteFolderFromS3,
+} from 'controllers/AWS';
 import {
   generateGetAllObjectsCallback,
   generateGetOneObjectCallback,
   generateUpdateObjectCallback,
-  generateDeleteObjectCallback,
 } from 'controllers/CRUDHandler';
 import prepareName from 'utils/prepareName';
-import { createFileIfNotExists, getWarnings } from './utils';
+import {
+  createFileIfNotExists,
+  getFolderNestedFiles,
+  getWarnings,
+} from './utils';
 import {
   ICreateFilesRequest,
   ICreateFolderRequest,
@@ -57,14 +64,38 @@ export const updateFile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const deleteFile = catchAsync(async (req: Request, res: Response) => {
-  generateDeleteObjectCallback({
-    Object: File,
-    req,
-    filter: { owner: req.user.id },
-    res,
-  });
-});
+export const deleteFile = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const query = { _id: req.params.id, owner: req.user.id };
+    const requestedFile = await File.findOne(query);
+
+    if (!requestedFile) {
+      return next(new AppError(messages.fileNotExist, 400));
+    }
+
+    let deletedCount = 0;
+
+    if (requestedFile.isFolder) {
+      const nestedFiles = await getFolderNestedFiles(requestedFile.id);
+
+      const filesIdsToDelete: Types.ObjectId[] = [requestedFile.id];
+      filesIdsToDelete.push(...nestedFiles.map(({ id }) => id));
+
+      await File.deleteMany({ _id: { $in: filesIdsToDelete } });
+      await deleteFolderFromS3(requestedFile.storageKey);
+      deletedCount = filesIdsToDelete.length;
+    } else {
+      await File.findOneAndDelete(query);
+      await deleteFileFromS3(requestedFile.storageKey);
+      deletedCount = 1;
+    }
+
+    res.status(200).json({
+      deletedCount,
+      status: Status.SUCCESS,
+    });
+  }
+);
 
 export const createFilesMatchingUploads = catchAsync(
   async (req: ICreateFilesRequest, res: Response) => {
@@ -107,7 +138,7 @@ export const createFolder = catchAsync(
     }
 
     const storageKey = `${path.join(req.uploadTarget, req.body.name)}/`;
-    createS3EmptyFolder(storageKey);
+    await createS3EmptyFolder(storageKey);
 
     const parentFileId = req.params.target;
 
