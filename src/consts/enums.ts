@@ -16,4 +16,9 @@ enum Environment {
   production = 'production',
 }
 
-export { DeviceType, Status, Environment };
+enum Role {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+}
+
+export { DeviceType, Status, Environment, Role };

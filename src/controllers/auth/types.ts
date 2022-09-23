@@ -4,7 +4,7 @@ import { IUser } from 'models/user';
 export interface ISignupRequest extends Request {
   body: Pick<
     IUser,
-    'name' | 'surname' | 'passwordConfirm' | 'email' | 'password'
+    'name' | 'surname' | 'email' | 'role' | 'password' | 'passwordConfirm'
   >;
 }
 export interface ILoginRequest extends Request {
