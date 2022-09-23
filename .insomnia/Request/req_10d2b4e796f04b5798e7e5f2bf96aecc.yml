@@ -1,9 +1,9 @@
 _id: req_10d2b4e796f04b5798e7e5f2bf96aecc
 type: Request
 parentId: fld_c9abd634fb7144ab9c59be6c7c4f23f4
-modified: 1661077893100
+modified: 1663876197534
 created: 1660912793900
-url: "{{ _.url }}/api/files/folder/6300ae92002ea942b629f533"
+url: "{{ _.url }}/api/files/folder"
 name: Create Folder
 description: |-
   /files/folder/:target?
@@ -18,7 +18,7 @@ body:
   mimeType: application/json
   text: |-
     {
-    	"name": "test",
+    	"name": "testMichala",
     	"isPrivate": true
     }
 parameters: []

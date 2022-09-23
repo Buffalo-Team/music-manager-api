@@ -1,9 +1,9 @@
 _id: req_03a3f06bd2094526bdb2d8ee9693d383
 type: Request
 parentId: fld_c9abd634fb7144ab9c59be6c7c4f23f4
-modified: 1661077896591
+modified: 1661349127543
 created: 1660139474174
-url: "{{ _.url }}/api/files/62f3b89325530c08c3d09199"
+url: "{{ _.url }}/api/files/630212144ba07b4e92f3fc3b"
 name: Get File By Id
 description: "type: CAR | MOBILE | LAPTOP | PC"
 method: GET

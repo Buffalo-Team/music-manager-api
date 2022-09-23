@@ -1,9 +1,9 @@
 _id: req_22649ad822e144e29f22422e293a5cce
 type: Request
 parentId: fld_c9abd634fb7144ab9c59be6c7c4f23f4
-modified: 1661077889216
+modified: 1663876200666
 created: 1660139474172
-url: "{{ _.url }}/api/files/upload/6300bb182129da26402558f7"
+url: "{{ _.url }}/api/files/upload"
 name: Upload Files
 description: |-
   /files/upload/:target?
@@ -32,7 +32,8 @@ body:
       value: ""
       description: ""
       type: file
-      fileName: /home/michal/Muzyka/Little Sis Nora - MDMA.mp3
+      fileName: /home/michal/Muzyka/Jacek Kaczmarski/Jacek Kaczmarski 05 - Carmagnole
+        1981/Ballada o powitaniu.mp3
 parameters: []
 headers:
   - name: Content-Type

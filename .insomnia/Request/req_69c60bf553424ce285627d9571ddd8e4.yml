@@ -1,7 +1,7 @@
 _id: req_69c60bf553424ce285627d9571ddd8e4
 type: Request
 parentId: fld_1818b1f9f15040a68055dec67ce53e84
-modified: 1661077851044
+modified: 1661349828018
 created: 1660138114366
 url: "{{ _.url }}/api/devices"
 name: Create Device
@@ -11,7 +11,7 @@ body:
   mimeType: application/json
   text: |-
     {
-    	"name": "Skoda Rapid",
+    	"name": "Skoda Rapid 2",
     	"type": "CAR",
     	"capacityMegabytes": 16384
     }

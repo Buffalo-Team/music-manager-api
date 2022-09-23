@@ -1,26 +1,25 @@
-_id: req_c9de8b2e78c240658086de11f88481dc
+_id: req_e3ca8ce0dc93452e94559b75500b49f3
 type: Request
-parentId: fld_fcdfb0264a5e4a57a4aa3337b5974439
-modified: 1663922928847
-created: 1660402360741
-url: "{{ _.url }}/api/users/login"
-name: Login
+parentId: fld_46f435e7ea1e4c889135aca82663d111
+modified: 1663922969162
+created: 1663921576330
+url: "{{ _.url }}/api/admin/database"
+name: Clear The Database
 description: ""
-method: POST
+method: DELETE
 body:
   mimeType: application/json
   text: |-
     {
-    	"email": "admin@gmail.com",
-    	"password": "password"
+    	"force": false
     }
 parameters: []
 headers:
   - name: Content-Type
     value: application/json
-    id: pair_7f93c622f9b74577b22438b80efc12f6
+    id: pair_fb40f48f1c3e4c39bb33a10795d165b4
 authentication: {}
-metaSortKey: -1659018342363
+metaSortKey: -1663921576330
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true
