@@ -1,0 +1,21 @@
+_id: req_95688b6d24224f6dbe1d1f27deed4899
+type: Request
+parentId: fld_c9abd634fb7144ab9c59be6c7c4f23f4
+modified: 1663931602323
+created: 1663931168265
+url: "{{ _.url }}/api/files/in/632d934e8ce58cff42e0788a"
+name: Get Files in Folder
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1660131850788.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
