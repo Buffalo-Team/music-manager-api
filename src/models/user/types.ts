@@ -1,9 +1,11 @@
 import { Model, Types } from 'mongoose';
+import { Role } from 'consts/enums';
 
 export interface IUserDTO {
   id: Types.ObjectId;
   name: string;
   surname: string;
+  role: Role;
 }
 
 export interface IUserMethods {

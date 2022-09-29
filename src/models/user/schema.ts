@@ -2,6 +2,7 @@ import { Schema, model } from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
 import normalizeOutput from 'utils/normalizeOutput';
+import { Role } from 'consts/enums';
 import { IUser, IUserDTO, UserModel, IUserMethods } from '.';
 
 const MIN_PASSWORD_LENGTH = 3;
@@ -22,6 +23,11 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
       unique: true,
       lowercase: true,
       validate: [validator.isEmail, 'Provided email is invalid'],
+    },
+    role: {
+      type: String,
+      enum: Object.values(Role),
+      default: Role.USER,
     },
     password: {
       type: String,
@@ -49,12 +55,13 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
 UserSchema.method('toJSON', normalizeOutput);
 
 UserSchema.method('mapToDTO', function (this: IUser): IUserDTO {
-  const { id, name, surname } = this;
+  const { id, name, surname, role } = this;
 
   return {
     id,
     name,
     surname,
+    role,
   };
 });
 
