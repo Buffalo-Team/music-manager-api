@@ -14,6 +14,10 @@ const OperationSchema = new Schema<
   IOperationMethods
 >(
   {
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
     type: {
       type: String,
       enum: Object.values(OperationType),

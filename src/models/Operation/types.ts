@@ -3,6 +3,7 @@ import { OperationType } from 'consts/enums';
 import { ModelBase } from 'types';
 
 export interface IOperationDTO extends ModelBase {
+  owner: Types.ObjectId;
   type: OperationType;
   file: Types.ObjectId;
   devices: Types.ObjectId[];

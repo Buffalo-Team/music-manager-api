@@ -1,13 +1,17 @@
 import { Request, Response } from 'express';
+import { forEach, groupBy } from 'lodash';
+import { OperationType, Status } from 'consts/enums';
 import Device from 'models/Device';
+import Operation, { IOperation } from 'models/Operation';
 import catchAsync from 'utils/catchAsync';
+import { isOperationPresent, removeOperationsOnFile } from './utils';
 import {
   generateGetAllObjectsCallback,
   generateGetOneObjectCallback,
   generateCreateObjectCallback,
   generateUpdateObjectCallback,
   generateDeleteObjectCallback,
-} from './CRUDHandler';
+} from '../CRUDHandler';
 
 export const getAllDevices = catchAsync(async (req: Request, res: Response) => {
   generateGetAllObjectsCallback({
@@ -54,3 +58,37 @@ export const deleteDevice = catchAsync(async (req: Request, res: Response) => {
     res,
   });
 });
+
+export const downloadMissingFiles = catchAsync(
+  async (req: Request, res: Response) => {
+    const deviceId = req.params.id;
+    let operations: IOperation[] = await Operation.find({
+      owner: req.user.id,
+      devices: deviceId,
+    });
+
+    const groupedByFileId = groupBy(operations, (operation) => operation.file);
+
+    forEach(
+      groupedByFileId,
+      (currentFileOperations: IOperation[], fileId: string) => {
+        const isDeleteOperation = isOperationPresent(
+          currentFileOperations,
+          OperationType.DELETE
+        );
+        const isAddOperation = isOperationPresent(
+          currentFileOperations,
+          OperationType.ADD
+        );
+
+        if (isDeleteOperation && isAddOperation) {
+          operations = removeOperationsOnFile(operations, fileId);
+        }
+      }
+    );
+
+    res.status(200).json({
+      status: Status.SUCCESS,
+    });
+  }
+);
