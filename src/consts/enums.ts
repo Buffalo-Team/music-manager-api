@@ -1,8 +1,8 @@
 enum DeviceType {
   CAR = 'CAR',
   MOBILE = 'MOBILE',
-  LAPTOP = 'LAPTOP',
-  PC = 'PC',
+  COMPUTER = 'COMPUTER',
+  WATCH = 'WATCH',
 }
 
 enum Status {
