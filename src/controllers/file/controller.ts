@@ -2,12 +2,12 @@ import { NextFunction, Request, Response } from 'express';
 import { isArray } from 'lodash';
 import { Types } from 'mongoose';
 import path from 'path';
-import File, { IFile } from 'models/file';
+import File, { IFile } from 'models/File';
 import convertBytesToMegabytes from 'utils/convertBytesToMegabytes';
 import { IMulterFile } from 'types';
 import catchAsync from 'utils/catchAsync';
 import AppError from 'utils/appError';
-import { Status } from 'consts/enums';
+import { OperationType, Status } from 'consts/enums';
 import messages from 'consts/messages';
 import UNKNOWN from 'consts/unknown';
 import {
@@ -21,6 +21,7 @@ import {
   generateUpdateObjectCallback,
 } from 'controllers/CRUDHandler';
 import prepareName from 'utils/prepareName';
+import { createOperationRecord } from 'controllers/operation';
 import {
   createFileIfNotExists,
   getFolderNestedFiles,
@@ -106,6 +107,15 @@ export const deleteFile = catchAsync(
       await deleteFileFromS3(requestedFile.storageKey);
       deletedCount = 1;
     }
+
+    createOperationRecord({
+      operationType: OperationType.DELETE,
+      owner: req.user.id,
+      fileId: requestedFile.id,
+      payload: {
+        oldLocation: requestedFile.storageKey,
+      },
+    });
 
     res.status(200).json({
       deletedCount,

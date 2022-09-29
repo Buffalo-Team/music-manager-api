@@ -1,17 +1,15 @@
 import { Model, Types } from 'mongoose';
 import { DeviceType } from 'consts/enums';
+import { ModelBase } from 'types';
 
-export interface IDeviceDTO {
-  id: Types.ObjectId;
+export interface IDeviceDTO extends ModelBase {
   name: string;
   type: DeviceType;
   owner: Types.ObjectId;
   capacityMegabytes: number;
   allocatedMegabytes: number;
-  missingFiles: Types.ObjectId[];
+  isNew: boolean;
   isSynchronizationNeeded: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface IDeviceMethods {

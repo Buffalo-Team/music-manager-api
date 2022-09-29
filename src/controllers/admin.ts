@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import catchAsync from 'utils/catchAsync';
-import File from 'models/file';
-import Device from 'models/device';
+import File from 'models/File';
+import Device from 'models/Device';
 import User from 'models/user';
 import { Role, Status } from 'consts/enums';
+import Operation from 'models/Operation';
 import { deleteFolderFromS3 } from './AWS';
 
 export interface IClearDatabaseRequest extends Request {
@@ -24,6 +25,7 @@ export const clearTheDatabase = catchAsync(
     await Promise.all([
       File.deleteMany(),
       Device.deleteMany(),
+      Operation.deleteMany(),
       User.deleteMany(userFilter),
       deleteFolderFromS3(rootFolderS3),
     ]);

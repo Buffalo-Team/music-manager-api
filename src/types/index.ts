@@ -1,3 +1,5 @@
+import { Types } from 'mongoose';
+
 export interface IMulterFile {
   fieldname: string;
   originalname: string;
@@ -6,4 +8,10 @@ export interface IMulterFile {
   size?: number;
   key?: string;
   location?: string;
+}
+
+export interface ModelBase {
+  id: Types.ObjectId;
+  createdAt: string;
+  updatedAt: string;
 }

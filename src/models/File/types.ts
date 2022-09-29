@@ -1,7 +1,7 @@
 import { Model, Types } from 'mongoose';
+import { ModelBase } from 'types';
 
-export interface IFileDTO {
-  id: Types.ObjectId;
+export interface IFileDTO extends ModelBase {
   name: string;
   owner: Types.ObjectId;
   storageKey: string;
@@ -10,8 +10,6 @@ export interface IFileDTO {
   directLink?: string;
   isFolder: boolean;
   isPrivate: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface IFileMethods {

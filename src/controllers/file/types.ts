@@ -1,4 +1,4 @@
-import { IFile } from 'models/file';
+import { IFile } from 'models/File';
 import { IUploadRequest } from 'controllers/AWS/types';
 
 export type TFileCreate = Omit<

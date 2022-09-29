@@ -26,12 +26,10 @@ const DeviceSchema = new Schema<IDevice, DeviceModel, IDeviceMethods>(
       type: Number,
       default: 0,
     },
-    missingFiles: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'File',
-      },
-    ],
+    isNew: {
+      type: Boolean,
+      default: true,
+    },
     isSynchronizationNeeded: {
       type: Boolean,
       default: true,

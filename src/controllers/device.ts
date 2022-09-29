@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Device from 'models/device';
+import Device from 'models/Device';
 import catchAsync from 'utils/catchAsync';
 import {
   generateGetAllObjectsCallback,

@@ -21,4 +21,11 @@ enum Role {
   ADMIN = 'ADMIN',
 }
 
-export { DeviceType, Status, Environment, Role };
+enum OperationType {
+  ADD = 'ADD',
+  DELETE = 'DELETE',
+  MOVE = 'MOVE',
+  RENAME = 'RENAME',
+}
+
+export { DeviceType, Status, Environment, Role, OperationType };

@@ -1,8 +1,10 @@
 import { flatten, set } from 'lodash';
 import { Types } from 'mongoose';
 import { IUploadRequest } from 'controllers/AWS/types';
-import File, { IFile } from 'models/file';
+import File, { IFile } from 'models/File';
 import messages from 'consts/messages';
+import { OperationType } from 'consts/enums';
+import { createOperationRecord } from 'controllers/operation';
 import { TFileCreate } from './types';
 
 export const createFileIfNotExists = async (
@@ -18,6 +20,15 @@ export const createFileIfNotExists = async (
 
   if (!file) {
     file = await File.create(data);
+
+    createOperationRecord({
+      operationType: OperationType.ADD,
+      owner: req.user.id,
+      fileId: file.id,
+      payload: {
+        newLocation: file.storageKey,
+      },
+    });
   } else {
     set(req, 'warnings.alreadyExisted', true);
   }
