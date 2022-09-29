@@ -3,7 +3,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Types } from 'mongoose';
 import { Environment, Role, Status } from 'consts/enums';
 import messages from 'consts/messages';
-import User, { IUser } from 'models/user';
+import User, { IUser } from 'models/User';
 import AppError from 'utils/appError';
 import catchAsync from 'utils/catchAsync';
 import { ILoginRequest, ISignupRequest } from './types';

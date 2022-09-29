@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import catchAsync from 'utils/catchAsync';
 import File from 'models/File';
 import Device from 'models/Device';
-import User from 'models/user';
+import User from 'models/User';
 import { Role, Status } from 'consts/enums';
 import Operation from 'models/Operation';
 import { deleteFolderFromS3 } from './AWS';

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import catchAsync from 'utils/catchAsync';
-import User from 'models/user';
+import User from 'models/User';
 import AppError from 'utils/appError';
 import messages from 'consts/messages';
 import { Environment } from 'consts/enums';
