@@ -44,6 +44,23 @@ export const getAllFiles = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+export const getFilesInFolder = catchAsync(
+  async (req: Request, res: Response) => {
+    const isRootFolder = !req.params.folderId;
+
+    generateGetAllObjectsCallback({
+      Object: File,
+      dataKey: 'files',
+      filter: {
+        owner: req.user.id,
+        parentFile: isRootFolder ? null : req.params.folderId,
+      },
+      req,
+      res,
+    });
+  }
+);
+
 export const getOneFile = catchAsync(async (req: Request, res: Response) => {
   generateGetOneObjectCallback({
     Object: File,
