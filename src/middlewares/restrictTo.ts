@@ -5,8 +5,6 @@ import { Role } from 'consts/enums';
 
 export default (...roles: Role[]) =>
   (req: Request, res: Response, next: NextFunction) => {
-    if (req.user.role === Role.ADMIN) return next();
-
     if (!roles.includes(req.user.role)) {
       return next(new AppError(messages.permissionDenied, 403));
     }
