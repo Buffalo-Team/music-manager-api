@@ -1,0 +1,21 @@
+_id: req_e210bfcf0ef041c9a5907948bc9f0587
+type: Request
+parentId: fld_d665acc433034d68a5f39334238c53f1
+modified: 1664476062287
+created: 1664476045634
+url: "{{ _.url }}/api/operations"
+name: Get All Operations
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1664476045635
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
