@@ -10,6 +10,7 @@ export interface IDeviceDTO extends ModelBase {
   allocatedMegabytes: number;
   isNew: boolean;
   isSynchronizationNeeded: boolean;
+  missingFilesCount?: number;
 }
 
 export interface IDeviceMethods {
