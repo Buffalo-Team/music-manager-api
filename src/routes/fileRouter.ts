@@ -6,6 +6,7 @@ import {
   getAllFiles,
   createFilesMatchingUploads,
   createFolder,
+  getFilesInFolder,
 } from 'controllers/file';
 import protect from 'middlewares/protect';
 import resolveUploadTarget from 'middlewares/resolveUploadTarget';
@@ -15,9 +16,9 @@ const router = Router();
 
 router.use(protect); // YOU HAVE TO BE LOGGED IN TO ENTER ROUTES BELOW
 
-router.route('/:id').get(getOneFile).patch(updateFile).delete(deleteFile);
-
 router.route('/').get(getAllFiles);
+
+router.route('/in/:folderId?').get(getFilesInFolder);
 
 router
   .route('/upload/:target?')
@@ -28,5 +29,7 @@ router
   );
 
 router.route('/folder/:target?').post(resolveUploadTarget, createFolder);
+
+router.route('/:id').get(getOneFile).patch(updateFile).delete(deleteFile);
 
 export default router;

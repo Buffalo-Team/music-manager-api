@@ -1,9 +1,9 @@
 import { CookieOptions, NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Types } from 'mongoose';
-import { Environment, Status } from 'consts/enums';
+import { Environment, Role, Status } from 'consts/enums';
 import messages from 'consts/messages';
-import User, { IUser } from 'models/user';
+import User, { IUser } from 'models/User';
 import AppError from 'utils/appError';
 import catchAsync from 'utils/catchAsync';
 import { ILoginRequest, ISignupRequest } from './types';
@@ -42,11 +42,12 @@ const createSendToken = (
 };
 
 export const signup = catchAsync(async (req: ISignupRequest, res: Response) => {
-  const { name, surname, email, password, passwordConfirm } = req.body;
+  const { name, surname, email, role, password, passwordConfirm } = req.body;
   const user = await User.create({
     name: name.trim(),
     surname: surname.trim(),
     email: email.toLowerCase().trim(),
+    role: role || Role.USER,
     password,
     passwordConfirm,
   });

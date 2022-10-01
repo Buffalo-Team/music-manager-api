@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express';
 import { IUploadRequest } from 'controllers/AWS/types';
 import AppError from 'utils/appError';
 import catchAsync from 'utils/catchAsync';
-import File from 'models/file';
+import File from 'models/File';
 import messages from 'consts/messages';
 
 export default catchAsync(

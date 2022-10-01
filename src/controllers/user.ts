@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import User, { UserDTOSelect } from 'models/user';
+import User, { UserDTOSelect } from 'models/User';
 import catchAsync from 'utils/catchAsync';
 import {
   generateGetAllObjectsCallback,

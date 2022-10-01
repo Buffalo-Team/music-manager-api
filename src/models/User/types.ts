@@ -1,9 +1,11 @@
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
+import { Role } from 'consts/enums';
+import { ModelBase } from 'types';
 
-export interface IUserDTO {
-  id: Types.ObjectId;
+export interface IUserDTO extends ModelBase {
   name: string;
   surname: string;
+  role: Role;
 }
 
 export interface IUserMethods {

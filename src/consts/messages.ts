@@ -14,4 +14,7 @@ export default {
   fileNotExist: 'Requested file does not exist',
   someFilesAlreadyExisted: 'Some of the uploaded files have already existed',
   wrongFileType: 'Some of the uploaded files had wrong format',
+  permissionDenied: 'Permission denied',
+  deviceNotFound: 'The device was not found',
+  convertingStreamFailed: 'Converting stream failed',
 };

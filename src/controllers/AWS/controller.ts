@@ -8,6 +8,7 @@ import {
   S3Client,
   DeleteObjectsCommand,
   ObjectIdentifier,
+  GetObjectCommand,
 } from '@aws-sdk/client-s3';
 import { set } from 'lodash';
 import path from 'node:path';
@@ -112,4 +113,15 @@ export const deleteFolderFromS3 = async (folderPath: string) => {
   await s3.send(deleteCommand);
 
   if (listedObjects.IsTruncated) await deleteFolderFromS3(folderPath);
+};
+
+export const getFileFromAWS = (Key: string) => {
+  const params = {
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key,
+  };
+
+  const getCommand = new GetObjectCommand(params);
+
+  return s3.send(getCommand);
 };

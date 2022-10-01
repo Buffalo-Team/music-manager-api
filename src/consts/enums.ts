@@ -1,8 +1,8 @@
 enum DeviceType {
   CAR = 'CAR',
   MOBILE = 'MOBILE',
-  LAPTOP = 'LAPTOP',
-  PC = 'PC',
+  COMPUTER = 'COMPUTER',
+  WATCH = 'WATCH',
 }
 
 enum Status {
@@ -16,4 +16,16 @@ enum Environment {
   production = 'production',
 }
 
-export { DeviceType, Status, Environment };
+enum Role {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+}
+
+enum OperationType {
+  ADD = 'ADD',
+  DELETE = 'DELETE',
+  MOVE = 'MOVE',
+  RENAME = 'RENAME',
+}
+
+export { DeviceType, Status, Environment, Role, OperationType };
