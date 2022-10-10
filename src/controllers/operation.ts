@@ -23,7 +23,10 @@ export const createOperationRecord = async ({
   fileId,
   payload,
 }: CreateOperationRecordProps) => {
-  const devices = await Device.find({ owner, isNew: false }).select('id');
+  const devices = await Device.find({
+    owner,
+    isSynchronizationNeeded: false,
+  }).select('id');
 
   await Operation.create({
     owner,

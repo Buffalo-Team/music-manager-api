@@ -8,7 +8,6 @@ export interface IDeviceDTO extends ModelBase {
   owner: Types.ObjectId;
   capacityMegabytes: number;
   allocatedMegabytes: number;
-  isNew: boolean;
   isSynchronizationNeeded: boolean;
   missingFilesCount?: number;
 }

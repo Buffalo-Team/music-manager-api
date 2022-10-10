@@ -1,6 +1,7 @@
 import { Model, Types } from 'mongoose';
 import { OperationType } from 'consts/enums';
 import { ModelBase } from 'types';
+import { IFile } from 'models/File';
 
 export interface IOperationDTO extends ModelBase {
   owner: Types.ObjectId;
@@ -18,5 +19,8 @@ export interface IOperationMethods {
 }
 
 export interface IOperation extends IOperationDTO, IOperationMethods {}
+export interface IPopulatedOperation extends Omit<IOperation, 'file'> {
+  file: IFile;
+}
 
 export type OperationModel = Model<IOperation, {}, IOperationMethods>;

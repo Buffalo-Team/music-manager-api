@@ -3,15 +3,19 @@ import { filter, forEach, groupBy, map } from 'lodash';
 import { Readable } from 'stream';
 import { OperationType } from 'consts/enums';
 import Device from 'models/Device';
-import Operation, { IOperation } from 'models/Operation';
+import Operation from 'models/Operation';
 import catchAsync from 'utils/catchAsync';
-import File, { IFile } from 'models/File';
 import { getFileFromAWS } from 'controllers/AWS';
 import { IDevice } from 'models/Device/types';
 import AppError from 'utils/appError';
 import messages from 'consts/messages';
 import createZipFromFiles from 'utils/createZipFromFiles';
-import { isOperationPresent, removeOperationsOnFile } from './utils';
+import { IPopulatedOperation } from 'models/Operation/types';
+import {
+  generateFilename,
+  isOperationPresent,
+  removeOperationsOnFile,
+} from './utils';
 import {
   generateGetAllObjectsCallback,
   generateGetOneObjectCallback,
@@ -74,20 +78,20 @@ export const downloadMissingFiles = catchAsync(
       return next(new AppError(messages.deviceNotFound, 404));
     }
 
-    let operations: IOperation[] = await Operation.find({
+    let operations: IPopulatedOperation[] = await Operation.find({
       owner: req.user.id,
       devices: deviceId,
-    });
+    }).populate('file');
 
     const operationsGroupedByFileId = groupBy(
       operations,
-      (operation) => operation.file
+      (operation) => operation.file.id
     );
 
     // Simplify the operation list for each file
     forEach(
       operationsGroupedByFileId,
-      (currentFileOperations: IOperation[], fileId: string) => {
+      (currentFileOperations: IPopulatedOperation[], fileId: string) => {
         const isDeleteOperation = isOperationPresent(
           currentFileOperations,
           OperationType.DELETE
@@ -103,33 +107,24 @@ export const downloadMissingFiles = catchAsync(
       }
     );
 
-    const addedFilesIds = map(
-      filter(operations, (operation) => operation.type === OperationType.ADD),
-      ({ file }) => file
+    const fileAddOperations = filter(
+      operations,
+      ({ file, type }) => !file.isFolder && type === OperationType.ADD
     );
 
-    const filesToAttach: IFile[] = await File.find({
-      _id: { $in: addedFilesIds },
-    });
-
     const downloadedFiles = await Promise.all(
-      map(
-        filter(filesToAttach, ({ isFolder }) => !isFolder),
-        ({ storageKey }) => getFileFromAWS(storageKey)
-      )
+      map(fileAddOperations, ({ file }) => getFileFromAWS(file.storageKey))
     );
 
     const zipData = await createZipFromFiles(
       map(downloadedFiles, (object, index) => ({
         ...object,
         Body: object.Body as Readable,
-        name: filesToAttach[index].name,
+        name: fileAddOperations[index].file.name,
       }))
     );
 
-    const ZIP_FILENAME = `music-${
-      device.name
-    }-${new Date().toLocaleDateString()}.zip`;
+    const ZIP_FILENAME = generateFilename(device.name);
 
     res.attachment(ZIP_FILENAME);
     res.set('Content-Type', 'application/octet-stream');
