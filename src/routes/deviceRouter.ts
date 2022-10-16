@@ -6,6 +6,7 @@ import {
   getAllDevices,
   createDevice,
   downloadMissingFiles,
+  markAsUpToDate,
 } from 'controllers/device';
 import protect from 'middlewares/protect';
 
@@ -16,6 +17,8 @@ router.use(protect); // YOU HAVE TO BE LOGGED IN TO ENTER ROUTES BELOW
 router.route('/').get(getAllDevices).post(createDevice);
 
 router.route('/:id/downloadMissingFiles').get(downloadMissingFiles);
+
+router.route('/:id/markAsUpToDate').patch(markAsUpToDate);
 
 router.route('/:id').get(getOneDevice).patch(updateDevice).delete(deleteDevice);
 

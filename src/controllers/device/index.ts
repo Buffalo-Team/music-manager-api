@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { filter, forEach, groupBy, map } from 'lodash';
 import { Readable } from 'stream';
-import { OperationType } from 'consts/enums';
+import { OperationType, Status } from 'consts/enums';
 import Device from 'models/Device';
 import Operation from 'models/Operation';
 import catchAsync from 'utils/catchAsync';
@@ -130,5 +130,18 @@ export const downloadMissingFiles = catchAsync(
     res.set('Content-Type', 'application/octet-stream');
     res.set('Content-Length', `${zipData.length}`);
     res.send(zipData);
+  }
+);
+
+export const markAsUpToDate = catchAsync(
+  async (req: Request, res: Response) => {
+    await Operation.updateMany(
+      { owner: req.user.id },
+      { $pull: { devices: req.params.id } }
+    );
+
+    res.status(200).json({
+      status: Status.SUCCESS,
+    });
   }
 );
