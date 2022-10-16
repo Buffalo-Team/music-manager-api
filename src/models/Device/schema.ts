@@ -32,6 +32,7 @@ const DeviceSchema = new Schema<IDevice, DeviceModel, IDeviceMethods>(
       type: Boolean,
       default: true,
     },
+    lastMissingFilesDownload: Date,
   },
   { timestamps: true }
 );

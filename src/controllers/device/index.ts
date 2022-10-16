@@ -78,6 +78,10 @@ export const downloadMissingFiles = catchAsync(
       return next(new AppError(messages.deviceNotFound, 404));
     }
 
+    await Device.findByIdAndUpdate(device.id, {
+      lastMissingFilesDownload: new Date(),
+    });
+
     let operations: IPopulatedOperation[] = await Operation.find({
       owner: req.user.id,
       devices: deviceId,
@@ -134,9 +138,17 @@ export const downloadMissingFiles = catchAsync(
 );
 
 export const markAsUpToDate = catchAsync(
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
+    const device = await Device.findById(req.params.id);
+    if (!device) {
+      return next(new AppError(messages.deviceNotFound, 404));
+    }
+
     await Operation.updateMany(
-      { owner: req.user.id },
+      {
+        owner: req.user.id,
+        createdAt: { $lt: device.lastMissingFilesDownload },
+      },
       { $pull: { devices: req.params.id } }
     );
 
