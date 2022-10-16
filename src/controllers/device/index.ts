@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { filter, forEach, groupBy, map } from 'lodash';
 import { Readable } from 'stream';
-import { OperationType } from 'consts/enums';
+import { OperationType, Status } from 'consts/enums';
 import Device from 'models/Device';
 import Operation from 'models/Operation';
 import catchAsync from 'utils/catchAsync';
@@ -78,6 +78,10 @@ export const downloadMissingFiles = catchAsync(
       return next(new AppError(messages.deviceNotFound, 404));
     }
 
+    await Device.findByIdAndUpdate(device.id, {
+      lastMissingFilesDownload: new Date(),
+    });
+
     let operations: IPopulatedOperation[] = await Operation.find({
       owner: req.user.id,
       devices: deviceId,
@@ -130,5 +134,28 @@ export const downloadMissingFiles = catchAsync(
     res.set('Content-Type', 'application/octet-stream');
     res.set('Content-Length', `${zipData.length}`);
     res.send(zipData);
+  }
+);
+
+export const markAsUpToDate = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const device = await Device.findById(req.params.id);
+    if (!device) {
+      return next(new AppError(messages.deviceNotFound, 404));
+    }
+
+    await Operation.updateMany(
+      {
+        owner: req.user.id,
+        ...(device.lastMissingFilesDownload && {
+          createdAt: { $lt: device.lastMissingFilesDownload },
+        }),
+      },
+      { $pull: { devices: req.params.id } }
+    );
+
+    res.status(200).json({
+      status: Status.SUCCESS,
+    });
   }
 );
