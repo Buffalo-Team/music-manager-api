@@ -147,7 +147,9 @@ export const markAsUpToDate = catchAsync(
     await Operation.updateMany(
       {
         owner: req.user.id,
-        createdAt: { $lt: device.lastMissingFilesDownload },
+        ...(device.lastMissingFilesDownload && {
+          createdAt: { $lt: device.lastMissingFilesDownload },
+        }),
       },
       { $pull: { devices: req.params.id } }
     );
