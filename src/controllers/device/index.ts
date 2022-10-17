@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { filter, forEach, groupBy, map } from 'lodash';
+import { filter, groupBy, map } from 'lodash';
 import { Readable } from 'stream';
 import { OperationType, Status } from 'consts/enums';
 import Device from 'models/Device';
@@ -11,11 +11,7 @@ import AppError from 'utils/appError';
 import messages from 'consts/messages';
 import createZipFromFiles from 'utils/createZipFromFiles';
 import { IPopulatedOperation } from 'models/Operation/types';
-import {
-  generateFilename,
-  isOperationPresent,
-  removeOperationsOnFile,
-} from './utils';
+import { generateFilename, simplifyAddDeleteOperations } from './utils';
 import {
   generateGetAllObjectsCallback,
   generateGetOneObjectCallback,
@@ -92,24 +88,11 @@ export const downloadMissingFiles = catchAsync(
       (operation) => operation.file.id
     );
 
-    // Simplify the operation list for each file
-    forEach(
+    operations = simplifyAddDeleteOperations(
+      operations,
       operationsGroupedByFileId,
-      (currentFileOperations: IPopulatedOperation[], fileId: string) => {
-        const isDeleteOperation = isOperationPresent(
-          currentFileOperations,
-          OperationType.DELETE
-        );
-        const isAddOperation = isOperationPresent(
-          currentFileOperations,
-          OperationType.ADD
-        );
-
-        if (isDeleteOperation && isAddOperation) {
-          operations = removeOperationsOnFile(operations, fileId);
-        }
-      }
-    );
+      'file.id'
+    ) as IPopulatedOperation[];
 
     const fileAddOperations = filter(
       operations,
