@@ -3,7 +3,7 @@ import { exeFileKey } from 'consts/config';
 import { uploadLocalFileToS3 } from 'controllers/AWS';
 
 export default async () => {
-  const outputPath = 'dist/apply-music-to-device.exe';
+  const outputPath = 'output/apply-music-to-device.exe';
   await pkgApi('src/exe/index.js', {
     targets: 'node16-win',
     output: outputPath,
