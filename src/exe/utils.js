@@ -36,7 +36,7 @@ module.exports.performFilesOperations = ({
         operation.fileName
       );
 
-      if (songPath === destinationSongPath) {
+      if (fs.existsSync(destinationSongPath)) {
         StateManager.reportWarning(
           `File ${operation.fileName} already in ${destinationPath}`
         );
