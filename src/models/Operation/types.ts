@@ -9,8 +9,8 @@ export interface IOperationDTO extends ModelBase {
   file: Types.ObjectId;
   devices: Types.ObjectId[];
   payload: {
-    oldLocation: String;
-    newLocation: String;
+    oldLocation: string;
+    newLocation: string;
   };
 }
 

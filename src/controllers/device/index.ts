@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { filter, forEach, groupBy, map } from 'lodash';
+import Admz from 'adm-zip';
 import { Readable } from 'stream';
 import { OperationType, Status } from 'consts/enums';
 import Device from 'models/Device';
@@ -9,9 +10,11 @@ import { getFileFromAWS } from 'controllers/AWS';
 import { IDevice } from 'models/Device/types';
 import AppError from 'utils/appError';
 import messages from 'consts/messages';
-import createZipFromFiles from 'utils/createZipFromFiles';
 import { IPopulatedOperation } from 'models/Operation/types';
+import { exeFileKey, exeFileName, exeReadmePath } from 'consts/config';
+import addFilesToZip from 'utils/addFilesToZip';
 import {
+  createJsonData,
   generateFilename,
   isOperationPresent,
   removeOperationsOnFile,
@@ -120,20 +123,36 @@ export const downloadMissingFiles = catchAsync(
       map(fileAddOperations, ({ file }) => getFileFromAWS(file.storageKey))
     );
 
-    const zipData = await createZipFromFiles(
-      map(downloadedFiles, (object, index) => ({
-        ...object,
-        Body: object.Body as Readable,
-        name: fileAddOperations[index].file.name,
-      }))
-    );
+    const downloadedExeFile = await getFileFromAWS(exeFileKey);
+
+    let zp = new Admz();
+    zp = await addFilesToZip(zp, {
+      downloaded: [
+        ...map(downloadedFiles, (object, index) => ({
+          ...object,
+          Body: object.Body as Readable,
+          name: fileAddOperations[index].file.name,
+        })),
+        {
+          Body: downloadedExeFile.Body as Readable,
+          name: exeFileName,
+        },
+      ],
+      local: [exeReadmePath],
+    });
+
+    const dataJson = createJsonData(operations);
+
+    zp.addFile('data.json', Buffer.from(dataJson));
+
+    const zipBuffer = zp.toBuffer();
 
     const ZIP_FILENAME = generateFilename(device.name);
 
     res.attachment(ZIP_FILENAME);
     res.set('Content-Type', 'application/octet-stream');
-    res.set('Content-Length', `${zipData.length}`);
-    res.send(zipData);
+    res.set('Content-Length', `${zipBuffer.length}`);
+    res.send(zipBuffer);
   }
 );
 
