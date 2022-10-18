@@ -13,7 +13,10 @@ interface IArgs {
   local: string[];
 }
 
-export default async (zp: Admz, { downloaded, local }: IArgs) => {
+export default async (
+  zp: Admz,
+  { downloaded, local }: IArgs
+): Promise<Admz> => {
   const filesBuffers = await Promise.all(
     map(downloaded, ({ Body }) => streamToBuffer(Body))
   );

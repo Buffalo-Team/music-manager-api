@@ -2,11 +2,13 @@ const path = require('path');
 const fs = require('fs');
 const StateManager = require('./StateManager');
 
+const PATH_DELIMITER = '\\';
+
 module.exports.getCurrentDirectory = (execPath) =>
   execPath
-    .split('\\')
+    .split(PATH_DELIMITER)
     .filter((_, index, array) => index < array.length - 1)
-    .join('\\');
+    .join(PATH_DELIMITER);
 
 module.exports.createFolders = ({
   currentDirectory,

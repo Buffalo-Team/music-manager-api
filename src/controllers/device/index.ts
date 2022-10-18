@@ -142,7 +142,6 @@ export const downloadMissingFiles = catchAsync(
     });
 
     const dataJson = createJsonData(operations);
-
     zp.addFile('data.json', Buffer.from(dataJson));
 
     const zipBuffer = zp.toBuffer();
