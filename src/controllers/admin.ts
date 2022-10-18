@@ -5,6 +5,7 @@ import Device from 'models/Device';
 import User from 'models/User';
 import { Role, Status } from 'consts/enums';
 import Operation from 'models/Operation';
+import generateExeFileAndUploadToS3 from 'utils/generateExeFileAndUploadToS3';
 import { deleteFolderFromS3 } from './AWS';
 
 export interface IClearDatabaseRequest extends Request {
@@ -35,3 +36,11 @@ export const clearTheDatabase = catchAsync(
     });
   }
 );
+
+export const generateExe = catchAsync(async (req: Request, res: Response) => {
+  await generateExeFileAndUploadToS3();
+
+  res.status(200).json({
+    status: Status.SUCCESS,
+  });
+});
