@@ -4,33 +4,37 @@ const {
   getCurrentDirectory,
   createFolders,
   performFilesOperations,
+  waitForKeyPress,
 } = require('./utils');
 const { DATA_JSON_PATH } = require('./consts');
+const StateManager = require('./StateManager');
 
-const currentDirectory = getCurrentDirectory(process.execPath);
-
-try {
-  const dataRaw = fs.readFileSync(DATA_JSON_PATH);
-  const { devicePath, storagePath, operations } = JSON.parse(dataRaw);
-
-  const [foldersCreateOperations, restOperations] = partition(
-    operations,
-    ({ type, isFolder }) => type === 'ADD' && isFolder === true
+(async () => {
+  const currentDirectory = getCurrentDirectory(process.execPath);
+  await waitForKeyPress(
+    `This application will move and delete files inside ${currentDirectory} directory and child directories. Do you want to continue?`
   );
 
-  createFolders({ devicePath, foldersCreateOperations });
+  try {
+    const dataRaw = fs.readFileSync(DATA_JSON_PATH);
+    const { operations } = JSON.parse(dataRaw);
 
-  performFilesOperations({
-    filesOperations: restOperations,
-    currentDirectory,
-    devicePath,
-    storagePath,
-  });
-} catch (err) {
-  console.log(err);
-}
+    const [foldersCreateOperations, restOperations] = partition(
+      operations,
+      ({ type, isFolder }) => type === 'ADD' && isFolder === true
+    );
 
-console.log('Press any key to exit');
-process.stdin.setRawMode(true);
-process.stdin.resume();
-process.stdin.on('data', process.exit.bind(process, 0));
+    createFolders({ currentDirectory, foldersCreateOperations });
+
+    performFilesOperations({
+      filesOperations: restOperations,
+      currentDirectory,
+    });
+  } catch (err) {
+    StateManager.reportError(`Unexpected Error -> ${err}`);
+  }
+
+  await waitForKeyPress(
+    `\n${StateManager.status}\nYour device has been updated. Remember to mark it as up to date in the Music Manager application.`
+  ).then(() => process.exit(0));
+})();

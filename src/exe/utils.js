@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const StateManager = require('./StateManager');
 
 module.exports.getCurrentDirectory = (execPath) =>
   execPath
@@ -7,58 +8,71 @@ module.exports.getCurrentDirectory = (execPath) =>
     .filter((_, index, array) => index < array.length - 1)
     .join('\\');
 
-module.exports.createFolders = ({ devicePath, foldersCreateOperations }) => {
+module.exports.createFolders = ({
+  currentDirectory,
+  foldersCreateOperations,
+}) => {
   foldersCreateOperations.forEach((operation) => {
-    const folderPath = path.join(devicePath, operation.path);
+    const folderPath = path.join(currentDirectory, operation.path);
     if (!fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath);
-      console.log(`Created ${folderPath} folder.`);
+      StateManager.reportSuccess(`Created ${folderPath} folder.`);
     } else {
-      console.log(
-        `Error while creating ${folderPath}: Folder has already existed.`
-      );
+      StateManager.reportWarning(`Folder ${folderPath} has already existed.`);
     }
   });
 };
 
 module.exports.performFilesOperations = ({
   currentDirectory,
-  storagePath,
-  devicePath,
   filesOperations,
 }) => {
   filesOperations.forEach((operation) => {
     if (operation.type === 'ADD') {
-      const songPath = path.join(
-        currentDirectory,
-        storagePath,
-        operation.songName
-      );
-      const destinationPath = path.join(devicePath, operation.path);
+      const songPath = path.join(currentDirectory, operation.fileName);
+      const destinationPath = path.join(currentDirectory, operation.path);
       const destinationSongPath = path.join(
         destinationPath,
-        operation.songName
+        operation.fileName
       );
 
-      if (fs.existsSync(songPath) && fs.existsSync(destinationPath)) {
+      if (songPath === destinationSongPath) {
+        StateManager.reportWarning(
+          `File ${operation.fileName} already in ${destinationPath}`
+        );
+      } else if (fs.existsSync(songPath) && fs.existsSync(destinationPath)) {
         fs.renameSync(songPath, destinationSongPath);
-        console.log(`Moved ${operation.songName} to ${destinationPath}`);
+        StateManager.reportSuccess(
+          `Moved ${operation.fileName} to ${destinationPath}`
+        );
       } else {
-        console.log(
-          `Error while moving ${operation.songName}: Source or destination not found.`
+        StateManager.reportError(
+          `Moving ${operation.fileName} failed: Source or destination not found.`
         );
       }
     } else if (operation.type === 'DELETE') {
-      const fileToDeletePath = path.join(devicePath, operation.path);
+      const fileToDeletePath = path.join(currentDirectory, operation.path);
 
       if (fs.existsSync(fileToDeletePath)) {
         fs.unlinkSync(fileToDeletePath);
-        console.log(`Removed ${fileToDeletePath} successfully.`);
+        StateManager.reportSuccess(`Removed ${fileToDeletePath}.`);
       } else {
-        console.log(
-          `Error while removing ${fileToDeletePath}: File not found.`
+        StateManager.reportWarning(
+          `Removing ${fileToDeletePath} failed: File not found.`
         );
       }
     }
+  });
+};
+
+module.exports.waitForKeyPress = async (message) => {
+  console.log(message);
+  console.log('Click any key to continue. . .\n');
+  process.stdin.setRawMode(true);
+  return new Promise((resolve) => {
+    process.stdin.once('data', () => {
+      process.stdin.setRawMode(false);
+      resolve();
+    });
   });
 };
