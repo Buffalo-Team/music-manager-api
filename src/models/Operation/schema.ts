@@ -27,6 +27,10 @@ const OperationSchema = new Schema<
       type: Schema.Types.ObjectId,
       ref: 'File',
     },
+    fileSizeMegabytes: {
+      type: Number,
+      default: 0,
+    },
     devices: [
       {
         type: Schema.Types.ObjectId,

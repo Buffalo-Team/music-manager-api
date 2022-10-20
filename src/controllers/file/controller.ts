@@ -14,6 +14,7 @@ import {
   createS3EmptyFolder,
   deleteFileFromS3,
   deleteFolderFromS3,
+  getSizeOf,
 } from 'controllers/AWS';
 import {
   generateGetAllObjectsCallback,
@@ -111,7 +112,7 @@ export const deleteFile = catchAsync(
     createOperationRecord({
       operationType: OperationType.DELETE,
       owner: req.user.id,
-      fileId: requestedFile.id,
+      file: requestedFile,
       payload: {
         oldLocation: requestedFile.storageKey,
       },
@@ -132,18 +133,30 @@ export const createFilesMatchingUploads = catchAsync(
     const parentFileId = req.params.target;
 
     files.forEach((file: IMulterFile) => {
-      const data: TFileCreate = {
-        name: prepareName(file.originalname),
-        owner: req.user.id,
-        storageKey: file.key ?? UNKNOWN,
-        sizeMegabytes: convertBytesToMegabytes(file.size ?? 0),
-        directLink: file.location,
-        parentFile: parentFileId ? new Types.ObjectId(parentFileId) : undefined,
-        isFolder: false,
-        isPrivate: req.body.isPrivate,
+      const getInfoAndCreateFile = async () => {
+        let { size } = file;
+        // note: sometimes file.size is 0
+        if (!size && file.key) {
+          size = await getSizeOf(file.key);
+        }
+
+        const data: TFileCreate = {
+          name: prepareName(file.originalname),
+          owner: req.user.id,
+          storageKey: file.key ?? UNKNOWN,
+          sizeMegabytes: convertBytesToMegabytes(size ?? 0),
+          directLink: file.location,
+          parentFile: parentFileId
+            ? new Types.ObjectId(parentFileId)
+            : undefined,
+          isFolder: false,
+          isPrivate: req.body.isPrivate,
+        };
+
+        return createFileIfNotExists(data, req);
       };
 
-      creatingFilesPromises.push(createFileIfNotExists(data, req));
+      creatingFilesPromises.push(getInfoAndCreateFile());
     });
 
     const createdFiles = await Promise.all(creatingFilesPromises);

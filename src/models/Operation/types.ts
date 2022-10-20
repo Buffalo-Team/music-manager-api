@@ -7,6 +7,7 @@ export interface IOperationDTO extends ModelBase {
   owner: Types.ObjectId;
   type: OperationType;
   file: Types.ObjectId;
+  fileSizeMegabytes: number;
   devices: Types.ObjectId[];
   payload: {
     oldLocation: String;
