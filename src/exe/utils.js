@@ -10,6 +10,23 @@ module.exports.getCurrentDirectory = (execPath) =>
     .filter((_, index, array) => index < array.length - 1)
     .join(PATH_DELIMITER);
 
+// Copied from https://stackoverflow.com/questions/8496212/node-js-fs-unlink-function-causes-eperm-error
+const deleteFolderRecursive = (folderPath) => {
+  if (fs.existsSync(folderPath)) {
+    fs.readdirSync(folderPath).forEach((file) => {
+      const currentPath = path.join(folderPath, file);
+      if (fs.lstatSync(currentPath).isDirectory()) {
+        // recurse
+        deleteFolderRecursive(currentPath);
+      } else {
+        // delete file
+        fs.unlinkSync(currentPath);
+      }
+    });
+    fs.rmdirSync(folderPath);
+  }
+};
+
 module.exports.createFolders = ({
   currentDirectory,
   foldersCreateOperations,
@@ -56,7 +73,11 @@ module.exports.performFilesOperations = ({
       const fileToDeletePath = path.join(currentDirectory, operation.path);
 
       if (fs.existsSync(fileToDeletePath)) {
-        fs.unlinkSync(fileToDeletePath);
+        if (fs.lstatSync(fileToDeletePath).isDirectory()) {
+          deleteFolderRecursive(fileToDeletePath);
+        } else {
+          fs.unlinkSync(fileToDeletePath);
+        }
         StateManager.reportSuccess(`Removed ${fileToDeletePath}.`);
       } else {
         StateManager.reportWarning(
