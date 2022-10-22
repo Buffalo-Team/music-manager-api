@@ -9,8 +9,8 @@ export interface IOperationDTO extends ModelBase {
   file: Types.ObjectId;
   devices: Types.ObjectId[];
   payload: {
-    oldLocation: String;
-    newLocation: String;
+    oldLocation: string;
+    newLocation: string;
   };
 }
 
@@ -20,7 +20,7 @@ export interface IOperationMethods {
 
 export interface IOperation extends IOperationDTO, IOperationMethods {}
 export interface IPopulatedOperation extends Omit<IOperation, 'file'> {
-  file: IFile;
+  file?: IFile;
 }
 
 export type OperationModel = Model<IOperation, {}, IOperationMethods>;

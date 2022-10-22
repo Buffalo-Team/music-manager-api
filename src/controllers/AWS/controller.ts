@@ -11,6 +11,7 @@ import {
   GetObjectCommand,
 } from '@aws-sdk/client-s3';
 import { set } from 'lodash';
+import fs from 'fs';
 import path from 'node:path';
 import { IMulterFile } from 'types';
 import prepareName from 'utils/prepareName';
@@ -66,6 +67,18 @@ export const uploadToS3 = multer({
     }
   },
 });
+
+export const uploadLocalFileToS3 = async (filepath: string, key: string) => {
+  const fileContent = fs.readFileSync(filepath);
+
+  const params = {
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key: key,
+    Body: fileContent,
+  };
+  const command = new PutObjectCommand(params);
+  await s3.send(command);
+};
 
 export const createS3EmptyFolder = async (folderPath: string) => {
   const params = {

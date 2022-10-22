@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { forEach, map } from 'lodash';
+import { map } from 'lodash';
 import { DeviceType, OperationType } from 'consts/enums';
 import normalizeOutput from 'utils/normalizeOutput';
 import Operation, { IOperation } from 'models/Operation';
@@ -43,20 +43,27 @@ DeviceSchema.post('find', async (devices) => {
     map(devices, ({ id }) => Operation.find({ devices: id }))
   );
 
-  forEach(devices, (device: { _doc: IDevice }, index: number) => {
-    const counts = countOperationTypes(operationsForDevices[index]);
+  const promises = map(devices, (device: { _doc: IDevice }, index: number) => {
+    const assignMissingFilesCount = async () => {
+      const counts = await countOperationTypes(operationsForDevices[index]);
 
-    // eslint-disable-next-line no-underscore-dangle, no-param-reassign
-    device._doc.missingFilesCount = counts[OperationType.ADD] || 0;
+      // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+      devices[index]._doc.missingFilesCount = counts[OperationType.ADD] || 0;
+    };
+
+    return assignMissingFilesCount();
   });
+
+  await Promise.all(promises);
 });
 
 DeviceSchema.post('findOne', async (device) => {
+  if (!device) return;
   const operations: IOperation[] = await Operation.find({
     devices: device.id,
   });
 
-  const counts = countOperationTypes(operations);
+  const counts = await countOperationTypes(operations);
 
   // eslint-disable-next-line no-underscore-dangle, no-param-reassign
   device._doc.missingFilesCount = counts[OperationType.ADD] || 0;
