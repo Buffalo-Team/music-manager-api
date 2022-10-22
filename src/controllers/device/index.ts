@@ -10,7 +10,7 @@ import { getFileFromAWS } from 'controllers/AWS';
 import { IDevice } from 'models/Device/types';
 import AppError from 'utils/appError';
 import messages from 'consts/messages';
-import { IPopulatedOperation } from 'models/Operation/types';
+import { IOperation, IPopulatedOperation } from 'models/Operation/types';
 import { exeFileKey, exeFileName, exeReadmePath } from 'consts/config';
 import addFilesToZip from 'utils/addFilesToZip';
 import {
@@ -76,6 +76,7 @@ export const downloadMissingFiles = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const deviceId = req.params.id;
     const device: IDevice | null = await Device.findById(deviceId);
+
     if (!device) {
       return next(new AppError(messages.deviceNotFound, 404));
     }
@@ -84,29 +85,38 @@ export const downloadMissingFiles = catchAsync(
       lastMissingFilesDownload: new Date(),
     });
 
-    let operations: IPopulatedOperation[] = await Operation.find({
+    let operations: IOperation[] = await Operation.find({
       owner: req.user.id,
       devices: deviceId,
-    }).populate('file');
+    });
 
     const operationsGroupedByFileId = groupBy(
       operations,
-      (operation) => operation.file.id
+      (operation) => operation.file
     );
 
-    operations = simplifyAddDeleteOperations(
+    operations = await simplifyAddDeleteOperations(
       operations,
-      operationsGroupedByFileId,
-      'file.id'
-    ) as IPopulatedOperation[];
+      operationsGroupedByFileId
+    );
+
+    await Promise.all(
+      map(
+        operations,
+        (operation) => operation.populate && operation.populate('file')
+      )
+    );
+
+    // @ts-ignore
+    const populatedOperations: IPopulatedOperation[] = operations;
 
     const fileAddOperations = filter(
-      operations,
-      ({ file, type }) => !file.isFolder && type === OperationType.ADD
+      populatedOperations,
+      ({ file, type }) => !file?.isFolder && type === OperationType.ADD
     );
 
     const downloadedFiles = await Promise.all(
-      map(fileAddOperations, ({ file }) => getFileFromAWS(file.storageKey))
+      map(fileAddOperations, ({ file }) => getFileFromAWS(file!.storageKey))
     );
 
     const downloadedExeFile = await getFileFromAWS(exeFileKey);
@@ -117,7 +127,7 @@ export const downloadMissingFiles = catchAsync(
         ...map(downloadedFiles, (object, index) => ({
           ...object,
           Body: object.Body as Readable,
-          name: fileAddOperations[index].file.name,
+          name: fileAddOperations[index]!.file!.name,
         })),
         {
           Body: downloadedExeFile.Body as Readable,
@@ -127,7 +137,7 @@ export const downloadMissingFiles = catchAsync(
       local: [exeReadmePath],
     });
 
-    const dataJson = createJsonData(operations);
+    const dataJson = createJsonData(populatedOperations);
     zp.addFile('data.json', Buffer.from(dataJson));
 
     const zipBuffer = zp.toBuffer();

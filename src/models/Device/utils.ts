@@ -3,19 +3,22 @@ import { OperationType } from 'consts/enums';
 import { simplifyAddDeleteOperations } from 'controllers/device/utils';
 import { IOperation } from 'models/Operation';
 
-const countOperationTypes = (
+type ICountByType = {
+  [key in OperationType]?: number;
+};
+
+const countOperationTypes = async (
   operations: IOperation[]
-): { [key in OperationType]?: number } => {
+): Promise<ICountByType> => {
   const operationsGroupedByFileId = groupBy(
     operations,
     (operation) => operation.file
   );
 
-  const simplifiedOperations = simplifyAddDeleteOperations(
+  const simplifiedOperations = await simplifyAddDeleteOperations(
     operations,
-    operationsGroupedByFileId,
-    'file'
-  ) as IOperation[];
+    operationsGroupedByFileId
+  );
 
   return countBy(simplifiedOperations, 'type');
 };
