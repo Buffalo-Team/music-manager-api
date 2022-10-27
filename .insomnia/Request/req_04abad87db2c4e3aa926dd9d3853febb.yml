@@ -1,0 +1,21 @@
+_id: req_04abad87db2c4e3aa926dd9d3853febb
+type: Request
+parentId: fld_46f435e7ea1e4c889135aca82663d111
+modified: 1666085314875
+created: 1666013002759
+url: "{{ _.url }}/api/admin/generateExe"
+name: Generate EXE file
+description: ""
+method: POST
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1663921576380
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
