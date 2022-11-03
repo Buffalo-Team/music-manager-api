@@ -49,6 +49,8 @@ DeviceSchema.post('find', async (devices) => {
 
       // eslint-disable-next-line no-underscore-dangle, no-param-reassign
       devices[index]._doc.missingFilesCount = counts[OperationType.ADD] || 0;
+      // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+      devices[index]._doc.deletedFilesCount = counts[OperationType.DELETE] || 0;
     };
 
     return assignMissingFilesCount();
@@ -67,6 +69,8 @@ DeviceSchema.post('findOne', async (device) => {
 
   // eslint-disable-next-line no-underscore-dangle, no-param-reassign
   device._doc.missingFilesCount = counts[OperationType.ADD] || 0;
+  // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+  device._doc.deletedFilesCount = counts[OperationType.DELETE] || 0;
 });
 
 DeviceSchema.method('toJSON', normalizeOutput);
