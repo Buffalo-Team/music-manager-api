@@ -158,40 +158,51 @@ export const markAsUpToDate = catchAsync(
       return next(new AppError(messages.deviceNotFound, 404));
     }
 
-    const operationsFilter = {
-      owner: req.user.id,
-      ...(device.lastMissingFilesDownload && {
-        createdAt: { $lt: device.lastMissingFilesDownload },
-      }),
-    };
-
-    const operations: IPopulatedOperation[] = await Operation.find(
-      operationsFilter
-    );
-
-    await Operation.updateMany(operationsFilter, {
-      $pull: { devices: req.params.id },
-    });
-
-    let allocatedMegabytesChange = 0;
-
-    operations.forEach(({ type, fileSizeMegabytes }) => {
-      if (type === OperationType.ADD) {
-        allocatedMegabytesChange += fileSizeMegabytes;
-      } else if (type === OperationType.DELETE) {
-        allocatedMegabytesChange -= fileSizeMegabytes;
-      }
-    });
-
-    const updatedDevice = await Device.findByIdAndUpdate(
-      device.id,
-      {
-        $inc: {
-          allocatedMegabytes: Math.round(allocatedMegabytesChange * 10) / 10,
+    let updatedDevice;
+    if (device.isSynchronizationNeeded) {
+      updatedDevice = await Device.findByIdAndUpdate(
+        req.params.id,
+        {
+          isSynchronizationNeeded: false,
         },
-      },
-      { new: true }
-    );
+        { new: true }
+      );
+    } else {
+      const operationsFilter = {
+        owner: req.user.id,
+        ...(device.lastMissingFilesDownload && {
+          createdAt: { $lt: device.lastMissingFilesDownload },
+        }),
+      };
+
+      const operations: IPopulatedOperation[] = await Operation.find(
+        operationsFilter
+      );
+
+      await Operation.updateMany(operationsFilter, {
+        $pull: { devices: req.params.id },
+      });
+
+      let allocatedMegabytesChange = 0;
+
+      operations.forEach(({ type, fileSizeMegabytes }) => {
+        if (type === OperationType.ADD) {
+          allocatedMegabytesChange += fileSizeMegabytes;
+        } else if (type === OperationType.DELETE) {
+          allocatedMegabytesChange -= fileSizeMegabytes;
+        }
+      });
+
+      updatedDevice = await Device.findByIdAndUpdate(
+        device.id,
+        {
+          $inc: {
+            allocatedMegabytes: Math.round(allocatedMegabytesChange * 10) / 10,
+          },
+        },
+        { new: true }
+      );
+    }
 
     res.status(200).json({
       status: Status.SUCCESS,
