@@ -138,3 +138,13 @@ export const getFileFromAWS = (Key: string) => {
 
   return s3.send(getCommand);
 };
+
+export const getSizeOf = async (Key: string) => {
+  const params = {
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key,
+  };
+  const headCommand = new HeadObjectCommand(params);
+  const info = await s3.send(headCommand);
+  return info.ContentLength;
+};

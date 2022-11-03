@@ -158,18 +158,44 @@ export const markAsUpToDate = catchAsync(
       return next(new AppError(messages.deviceNotFound, 404));
     }
 
-    await Operation.updateMany(
+    const operationsFilter = {
+      owner: req.user.id,
+      ...(device.lastMissingFilesDownload && {
+        createdAt: { $lt: device.lastMissingFilesDownload },
+      }),
+    };
+
+    const operations: IPopulatedOperation[] = await Operation.find(
+      operationsFilter
+    );
+
+    await Operation.updateMany(operationsFilter, {
+      $pull: { devices: req.params.id },
+    });
+
+    let allocatedMegabytesChange = 0;
+
+    operations.forEach(({ type, fileSizeMegabytes }) => {
+      if (type === OperationType.ADD) {
+        allocatedMegabytesChange += fileSizeMegabytes;
+      } else if (type === OperationType.DELETE) {
+        allocatedMegabytesChange -= fileSizeMegabytes;
+      }
+    });
+
+    const updatedDevice = await Device.findByIdAndUpdate(
+      device.id,
       {
-        owner: req.user.id,
-        ...(device.lastMissingFilesDownload && {
-          createdAt: { $lt: device.lastMissingFilesDownload },
-        }),
+        $inc: {
+          allocatedMegabytes: Math.round(allocatedMegabytesChange * 10) / 10,
+        },
       },
-      { $pull: { devices: req.params.id } }
+      { new: true }
     );
 
     res.status(200).json({
       status: Status.SUCCESS,
+      device: updatedDevice,
     });
   }
 );

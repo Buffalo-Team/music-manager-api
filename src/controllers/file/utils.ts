@@ -24,7 +24,7 @@ export const createFileIfNotExists = async (
     createOperationRecord({
       operationType: OperationType.ADD,
       owner: req.user.id,
-      fileId: file.id,
+      file,
       payload: {
         newLocation: file.storageKey,
       },

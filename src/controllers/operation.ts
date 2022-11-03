@@ -5,12 +5,13 @@ import { OperationType } from 'consts/enums';
 import Device from 'models/Device';
 import Operation from 'models/Operation';
 import catchAsync from 'utils/catchAsync';
+import { IFile } from 'models/File';
 import { generateGetAllObjectsCallback } from './CRUDHandler';
 
 interface CreateOperationRecordProps {
   owner: Types.ObjectId;
   operationType: OperationType;
-  fileId: Types.ObjectId;
+  file: IFile;
   payload: {
     oldLocation?: string;
     newLocation?: string;
@@ -20,7 +21,7 @@ interface CreateOperationRecordProps {
 export const createOperationRecord = async ({
   owner,
   operationType,
-  fileId,
+  file,
   payload,
 }: CreateOperationRecordProps) => {
   const devices = await Device.find({
@@ -31,7 +32,8 @@ export const createOperationRecord = async ({
   await Operation.create({
     owner,
     type: operationType,
-    file: fileId,
+    file: file.id,
+    fileSizeMegabytes: file.sizeMegabytes,
     devices: map(devices, ({ id }) => id),
     payload,
   });
