@@ -10,7 +10,12 @@ export interface IMulterFile {
   location?: string;
 }
 
-export interface ModelBase {
+interface MongooseMethods {
+  populate?: (path: string) => void;
+  depopulate?: (path: string) => void;
+}
+
+export interface ModelBase extends MongooseMethods {
   id: Types.ObjectId;
   createdAt: string;
   updatedAt: string;

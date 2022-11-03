@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { filter, groupBy, map } from 'lodash';
+import Admz from 'adm-zip';
 import { Readable } from 'stream';
 import { OperationType, Status } from 'consts/enums';
 import Device from 'models/Device';
@@ -9,9 +10,14 @@ import { getFileFromAWS } from 'controllers/AWS';
 import { IDevice } from 'models/Device/types';
 import AppError from 'utils/appError';
 import messages from 'consts/messages';
-import createZipFromFiles from 'utils/createZipFromFiles';
-import { IPopulatedOperation } from 'models/Operation/types';
-import { generateFilename, simplifyAddDeleteOperations } from './utils';
+import { IOperation, IPopulatedOperation } from 'models/Operation/types';
+import { exeFileKey, exeFileName, exeReadmePath } from 'consts/config';
+import addFilesToZip from 'utils/addFilesToZip';
+import {
+  generateFilename,
+  simplifyAddDeleteOperations,
+  createJsonData,
+} from './utils';
 import {
   generateGetAllObjectsCallback,
   generateGetOneObjectCallback,
@@ -70,6 +76,7 @@ export const downloadMissingFiles = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const deviceId = req.params.id;
     const device: IDevice | null = await Device.findById(deviceId);
+
     if (!device) {
       return next(new AppError(messages.deviceNotFound, 404));
     }
@@ -78,45 +85,69 @@ export const downloadMissingFiles = catchAsync(
       lastMissingFilesDownload: new Date(),
     });
 
-    let operations: IPopulatedOperation[] = await Operation.find({
+    let operations: IOperation[] = await Operation.find({
       owner: req.user.id,
       devices: deviceId,
-    }).populate('file');
+    });
 
     const operationsGroupedByFileId = groupBy(
       operations,
-      (operation) => operation.file.id
+      (operation) => operation.file
     );
 
-    operations = simplifyAddDeleteOperations(
+    operations = await simplifyAddDeleteOperations(
       operations,
-      operationsGroupedByFileId,
-      'file.id'
-    ) as IPopulatedOperation[];
+      operationsGroupedByFileId
+    );
+
+    await Promise.all(
+      map(
+        operations,
+        (operation) => operation.populate && operation.populate('file')
+      )
+    );
+
+    // @ts-ignore
+    const populatedOperations: IPopulatedOperation[] = operations;
 
     const fileAddOperations = filter(
-      operations,
-      ({ file, type }) => !file.isFolder && type === OperationType.ADD
+      populatedOperations,
+      ({ file, type }) => !file?.isFolder && type === OperationType.ADD
     );
 
     const downloadedFiles = await Promise.all(
-      map(fileAddOperations, ({ file }) => getFileFromAWS(file.storageKey))
+      map(fileAddOperations, ({ file }) => getFileFromAWS(file!.storageKey))
     );
 
-    const zipData = await createZipFromFiles(
-      map(downloadedFiles, (object, index) => ({
-        ...object,
-        Body: object.Body as Readable,
-        name: fileAddOperations[index].file.name,
-      }))
-    );
+    const downloadedExeFile = await getFileFromAWS(exeFileKey);
+
+    let zp = new Admz();
+    zp = await addFilesToZip(zp, {
+      downloaded: [
+        ...map(downloadedFiles, (object, index) => ({
+          ...object,
+          Body: object.Body as Readable,
+          name: fileAddOperations[index]!.file!.name,
+        })),
+        {
+          Body: downloadedExeFile.Body as Readable,
+          name: exeFileName,
+        },
+      ],
+      local: [exeReadmePath],
+    });
+
+    const dataJson = createJsonData(populatedOperations);
+    zp.addFile('data.json', Buffer.from(dataJson));
+
+    const zipBuffer = zp.toBuffer();
 
     const ZIP_FILENAME = generateFilename(device.name);
 
     res.attachment(ZIP_FILENAME);
     res.set('Content-Type', 'application/octet-stream');
-    res.set('Content-Length', `${zipData.length}`);
-    res.send(zipData);
+    res.set('Content-Length', `${zipBuffer.length}`);
+    res.send(zipBuffer);
   }
 );
 

@@ -9,6 +9,8 @@ import morgan from 'morgan';
 import useRouters from 'middlewares/useRouters';
 import notFound from 'middlewares/notFound';
 import errorHandler from 'middlewares/errorHandler';
+import generateExeFileAndUploadToS3 from 'utils/generateExeFileAndUploadToS3';
+import { Environment } from 'consts/enums';
 
 const xss = require('xss-clean');
 
@@ -27,6 +29,12 @@ server.use(
 mongoose.connect(process.env.DATABASE_URI).then(() => {
   console.log('DB connection successful');
 });
+
+if (process.env.NODE_ENV === Environment.production) {
+  generateExeFileAndUploadToS3().then(() => {
+    console.log('EXE file uploaded to S3');
+  });
+}
 
 server.use(express.json({ limit: '10kb' }));
 server.use(cookieParser());
