@@ -11,8 +11,8 @@ import {
   GetObjectCommand,
 } from '@aws-sdk/client-s3';
 import { set } from 'lodash';
+import path from 'path';
 import fs from 'fs';
-import path from 'path/posix';
 import { IMulterFile } from 'types';
 import prepareName from 'utils/prepareName';
 import { IUploadRequest } from './types';
