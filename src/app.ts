@@ -25,7 +25,7 @@ server.use(
     credentials: true,
   })
 );
-console.log('Deploy! Deploy!');
+
 mongoose.connect(process.env.DATABASE_URI).then(() => {
   console.log('DB connection successful');
 });
