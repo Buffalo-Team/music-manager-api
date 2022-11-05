@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { isArray } from 'lodash';
 import { Types } from 'mongoose';
-import path from 'path';
+import path from 'path/posix';
 import File, { IFile } from 'models/File';
 import convertBytesToMegabytes from 'utils/convertBytesToMegabytes';
 import { IMulterFile } from 'types';
