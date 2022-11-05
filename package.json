@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npx ts-node-dev --prefer-ts true --no-notify -r tsconfig-paths/register --watch src --transpile-only src/app.ts",
     "start": "node ./build/app.js",
-    "build": "npx ttsc --p ./tsconfig.json"
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
