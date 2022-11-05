@@ -1,10 +1,12 @@
 {
 	"version": 2,
 	"name": "music-manager-api",
+	"buildCommand": "npm run build",
+	"outputDirectory": "build",
 	"builds": [
-		 { "src": "app.js", "use": "@vercel/node" }
+		 { "src": "build/app.js", "use": "@vercel/node" }
 	],
 	"routes": [
-		 { "src": "/(.*)", "dest": "/app.js" }
+		 { "src": "/(.*)", "dest": "build/app.js" }
 	]
 }
