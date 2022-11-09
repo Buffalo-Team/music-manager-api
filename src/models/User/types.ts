@@ -6,6 +6,7 @@ export interface IUserDTO extends ModelBase {
   name: string;
   surname: string;
   role: Role;
+  email: string;
 }
 
 export interface IUserMethods {
@@ -14,7 +15,6 @@ export interface IUserMethods {
 }
 
 export interface IUser extends IUserDTO, IUserMethods {
-  email: string;
   password: string;
   passwordConfirm?: string;
   createdAt: string;
