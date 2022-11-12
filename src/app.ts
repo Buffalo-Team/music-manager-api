@@ -30,7 +30,7 @@ mongoose.connect(process.env.DATABASE_URI).then(() => {
   console.log('DB connection successful');
 });
 
-if (process.env.NODE_ENV === Environment.production) {
+if (process.env.ENVIRONMENT === Environment.production) {
   generateExeFileAndUploadToS3().then(() => {
     console.log('EXE file uploaded to S3');
   });

@@ -7,7 +7,7 @@ import messages from 'consts/messages';
 import { Environment } from 'consts/enums';
 
 const environment: Environment =
-  Environment[process.env.NODE_ENV as keyof typeof Environment] ||
+  Environment[process.env.ENVIRONMENT as keyof typeof Environment] ||
   Environment.development;
 
 export default catchAsync(
