@@ -37,7 +37,7 @@ const existsInS3 = async (fileKey: string): Promise<boolean> => {
 };
 
 const createS3Key = (uploadTarget: string, filename: string) =>
-  path.join(uploadTarget, prepareName(filename));
+  path.posix.join(uploadTarget, prepareName(filename));
 
 export const uploadToS3 = multer({
   storage: multerS3({
