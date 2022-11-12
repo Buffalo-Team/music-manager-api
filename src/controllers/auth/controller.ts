@@ -9,7 +9,7 @@ import catchAsync from 'utils/catchAsync';
 import { ILoginRequest, ISignupRequest } from './types';
 
 const environment: Environment =
-  Environment[process.env.NODE_ENV as keyof typeof Environment] ||
+  Environment[process.env.ENVIRONMENT as keyof typeof Environment] ||
   Environment.development;
 
 const signToken = (id: Types.ObjectId): string =>

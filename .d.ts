@@ -1,5 +1,5 @@
-import { Environment } from "consts/enums";
-import { IUser } from "models/User";
+import { Environment } from 'consts/enums';
+import { IUser } from 'models/User';
 
 declare module 'xss-clean';
 
@@ -14,8 +14,8 @@ declare global {
       PORT?: string;
       S3_BUCKET_NAME: string;
       AWS_ACCESS_KEY_ID: string;
-      AWS_SECRET_ACCESS_KEY: string;  
-      NODE_ENV: Environment
+      AWS_SECRET_ACCESS_KEY: string;
+      ENVIRONMENT: Environment;
     }
   }
 }
@@ -23,7 +23,7 @@ declare global {
 declare global {
   namespace Express {
     interface Request {
-      user: IUser
+      user: IUser;
     }
   }
 }
