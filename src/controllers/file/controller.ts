@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { isArray } from 'lodash';
 import { Types } from 'mongoose';
-import path from 'path/posix';
+import path from 'path';
 import File, { IFile } from 'models/File';
 import convertBytesToMegabytes from 'utils/convertBytesToMegabytes';
 import { IMulterFile } from 'types';
@@ -177,7 +177,8 @@ export const createFolder = catchAsync(
       );
     }
 
-    const storageKey = `${path.join(req.uploadTarget, req.body.name)}/`;
+    const storageKey = `${path.posix.join(req.uploadTarget, req.body.name)}/`;
+
     await createS3EmptyFolder(storageKey);
 
     const parentFileId = req.params.target;
