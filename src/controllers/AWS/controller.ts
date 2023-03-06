@@ -11,14 +11,21 @@ import {
   GetObjectCommand,
 } from '@aws-sdk/client-s3';
 import { set } from 'lodash';
+import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
 import path from 'path';
 import fs from 'fs';
+import https from 'https';
 import { IMulterFile } from 'types';
 import prepareName from 'utils/prepareName';
 import { IUploadRequest } from './types';
 
 const s3 = new S3Client({
   region: 'eu-central-1',
+  requestHandler: new NodeHttpHandler({
+    httpsAgent: new https.Agent({
+      maxSockets: 1000, // fixes limit with max 50 files being downloaded
+    }),
+  }),
 });
 
 const existsInS3 = async (fileKey: string): Promise<boolean> => {
